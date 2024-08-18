@@ -322,11 +322,6 @@
             color: white;
         }
 
-        .clear-btn {
-            background-color: #f44336;
-            color: white;
-        }
-
         .button-container button:hover {
             opacity: 0.8;
         }
@@ -429,6 +424,35 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        .text-storage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        #textItems.collapsed {
+            display: none;
+        }
+
+        #textItems.expanded {
+            display: block;
+        }
+
+        .clear-btn {
+            background-color: #f44336;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -509,6 +533,10 @@
                 title: "文本存储",
                 content: `
                     <div class="text-storage">
+                        <div class="text-storage-header">
+                            <h3>文本存储</h3>
+                            <button id="toggleTextItems" class="toggle-btn">收起▼</button>
+                        </div>
                         <div class="input-container">
                             <input type="text" id="newTextTitle" placeholder="输入标题">
                             <textarea id="newTextContent" placeholder="输入内容"></textarea>
@@ -520,7 +548,7 @@
                             <button onclick="document.getElementById('csvFile').click()" class="import-btn">导入CSV</button>
                             <button onclick="clearAllTextItems()" class="clear-btn">清空所有</button>
                         </div>
-                        <div id="textItems"></div>
+                        <div id="textItems" class="expanded"></div>
                     </div>`
             }
         };
@@ -933,7 +961,7 @@
         }
 
         function copyTextItem(index) {
-            console.log("复制项目:", index);
+            console.log("���制项目:", index);
             const items = JSON.parse(localStorage.getItem('textItems')) || [];
             const text = items[index].content;
             navigator.clipboard.writeText(text).then(() => {
@@ -964,7 +992,21 @@
             }
         }
 
-                function toggleUpdateLog() {
+        function toggleTextItems() {
+            const textItems = document.getElementById('textItems');
+            const toggleBtn = document.getElementById('toggleTextItems');
+            if (textItems.classList.contains('expanded')) {
+                textItems.classList.remove('expanded');
+                textItems.classList.add('collapsed');
+                toggleBtn.textContent = '展开▲';
+            } else {
+                textItems.classList.remove('collapsed');
+                textItems.classList.add('expanded');
+                toggleBtn.textContent = '收起▼';
+            }
+        }
+
+        function toggleUpdateLog() {
             updateLogContent.style.display = updateLogContent.style.display === 'none' ? 'block' : 'none';
         }
 
@@ -1022,6 +1064,8 @@
                     element.style.transform = 'scale(1)';
                 });
             });
+
+            document.getElementById('toggleTextItems').addEventListener('click', toggleTextItems);
         });
     </script>
 </body>
