@@ -527,7 +527,7 @@
                     <div class="text-storage">
                         <div class="text-storage-header">
                             <h3>文本存储</h3>
-                            <button id="toggleTextItems" class="toggle-btn">展开▼</button>
+                            <button id="toggleTextItems" class="toggle-btn">收起▼</button>
                         </div>
                         <div class="input-container">
                             <input type="text" id="newTextTitle" placeholder="输入标题">
@@ -866,6 +866,9 @@
 
             // 在所有滑块加载完成后，重新初始化图表
             setTimeout(updateChart, 0);
+
+            // 添加这行代码来更新按钮状态
+            updateToggleButtonState();
         }
 
         function openSliderEditModal() {
@@ -953,7 +956,7 @@
         }
 
         function copyTextItem(index) {
-            console.log("���制项目:", index);
+            console.log("复制项目:", index);
             const items = JSON.parse(localStorage.getItem('textItems')) || [];
             const text = items[index].content;
             navigator.clipboard.writeText(text).then(() => {
@@ -984,17 +987,19 @@
             }
         }
 
-        function toggleTextItems() {
-            const textItems = document.getElementById('textItems');
-            const toggleBtn = document.getElementById('toggleTextItems');
-            if (textItems.classList.contains('expanded')) {
-                textItems.classList.remove('expanded');
-                textItems.classList.add('collapsed');
-                toggleBtn.textContent = '收起▲';
-            } else {
-                textItems.classList.remove('collapsed');
-                textItems.classList.add('expanded');
-                toggleBtn.textContent = '展开▼';
+        function toggleTextItems(event) {
+            if (event.target.id === 'toggleTextItems') {
+                const textItems = document.getElementById('textItems');
+                const toggleBtn = event.target;
+                if (textItems.classList.contains('expanded')) {
+                    textItems.classList.remove('expanded');
+                    textItems.classList.add('collapsed');
+                    toggleBtn.textContent = '展开▼';
+                } else {
+                    textItems.classList.remove('collapsed');
+                    textItems.classList.add('expanded');
+                    toggleBtn.textContent = '收起▲';
+                }
             }
         }
 
@@ -1057,8 +1062,25 @@
                 });
             });
 
-            document.getElementById('toggleTextItems').addEventListener('click', toggleTextItems);
+            // 使用事件委托，将事件监听器添加到父元素上
+            document.getElementById('sortableContainer').addEventListener('click', toggleTextItems);
+
+            // 初始化时更新按钮状态
+            updateToggleButtonState();
         });
+
+        // 添加一个新函数来更新按钮状态
+        function updateToggleButtonState() {
+            const textItems = document.getElementById('textItems');
+            const toggleBtn = document.getElementById('toggleTextItems');
+            if (textItems && toggleBtn) {
+                if (textItems.classList.contains('expanded')) {
+                    toggleBtn.textContent = '收起▲';
+                } else {
+                    toggleBtn.textContent = '展开▼';
+                }
+            }
+        }
     </script>
 </body>
 </html>
