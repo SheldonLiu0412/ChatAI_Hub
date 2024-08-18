@@ -688,35 +688,6 @@
             }
         }
 
-        function clearAllTextItems() {
-            const items = JSON.parse(localStorage.getItem('textItems')) || [];
-            if (items.length === 0) {
-                alert('没有可清空的文本项');
-                return;
-            }
-
-            if (confirm('确定要清空所有文本项吗？此操作不可撤销。')) {
-                let i = items.length - 1;
-                function deleteNextItem() {
-                    if (i >= 0) {
-                        deleteTextItem(i);
-                        i--;
-                        setTimeout(deleteNextItem, 100); // 每100毫秒删除一项
-                    } else {
-                        alert('所有文本项已清空');
-                        loadTextItems(); // 重新加载（此时应该是空的）
-                    }
-                }
-                deleteNextItem();
-            }
-        }
-
-        function deleteTextItem(index) {
-            console.log("删除项目:", index);
-            const items = JSON.parse(localStorage.getItem('textItems')) || [];
-            items.splice(index, 1);
-            localStorage.setItem('textItems', JSON.stringify(items));
-        }
 
         function changeIframe(site) {
             if (currentSite) {
@@ -971,7 +942,29 @@
             });
         }
 
-        function toggleUpdateLog() {
+        function deleteTextItem(index) {
+            console.log("删除项目:", index);
+            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+            items.splice(index, 1);
+            localStorage.setItem('textItems', JSON.stringify(items));
+            loadTextItems();
+        }
+
+        function clearAllTextItems() {
+            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+            if (items.length === 0) {
+                alert('没有可清空的文本项');
+                return;
+            }
+
+            if (confirm('确定要清空所有文本项吗？此操作不可撤销。')) {
+                localStorage.setItem('textItems', JSON.stringify([])); // 直接清空存储
+                loadTextItems(); // 重新加载空列表
+                alert('所有文本项已清空');
+            }
+        }
+
+                function toggleUpdateLog() {
             updateLogContent.style.display = updateLogContent.style.display === 'none' ? 'block' : 'none';
         }
 
