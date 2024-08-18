@@ -271,6 +271,8 @@
             padding: 15px;
             background-color: #f5f5f5;
             border-radius: 8px;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .input-container {
@@ -286,6 +288,7 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
+            box-sizing: border-box;
         }
 
         .input-container textarea {
@@ -295,32 +298,26 @@
 
         .button-container {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
         }
 
         .button-container button {
+            flex: 1 1 auto;
+            min-width: calc(50% - 5px); /* 确保每行至少有两个按钮 */
             padding: 8px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s;
+            white-space: nowrap;
         }
 
-        .add-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .export-btn {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .import-btn {
-            background-color: #FF9800;
-            color: white;
-        }
+        .add-btn { background-color: #4CAF50; color: white; }
+        .export-btn { background-color: #2196F3; color: white; }
+        .import-btn { background-color: #FF9800; color: white; }
+        .clear-btn { background-color: #f44336; color: white; }
 
         .button-container button:hover {
             opacity: 0.8;
@@ -448,11 +445,6 @@
         #textItems.expanded {
             display: block;
         }
-
-        .clear-btn {
-            background-color: #f44336;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -535,7 +527,7 @@
                     <div class="text-storage">
                         <div class="text-storage-header">
                             <h3>文本存储</h3>
-                            <button id="toggleTextItems" class="toggle-btn">收起▼</button>
+                            <button id="toggleTextItems" class="toggle-btn">展开▼</button>
                         </div>
                         <div class="input-container">
                             <input type="text" id="newTextTitle" placeholder="输入标题">
@@ -544,9 +536,9 @@
                         <div class="button-container">
                             <button onclick="addTextItem()" class="add-btn">添加</button>
                             <button onclick="exportCSV()" class="export-btn">导出CSV</button>
-                            <input type="file" id="csvFile" accept=".csv" style="display:none;" onchange="importCSV()">
                             <button onclick="document.getElementById('csvFile').click()" class="import-btn">导入CSV</button>
                             <button onclick="clearAllTextItems()" class="clear-btn">清空所有</button>
+                            <input type="file" id="csvFile" accept=".csv" style="display:none;" onchange="importCSV()">
                         </div>
                         <div id="textItems" class="expanded"></div>
                     </div>`
@@ -998,11 +990,11 @@
             if (textItems.classList.contains('expanded')) {
                 textItems.classList.remove('expanded');
                 textItems.classList.add('collapsed');
-                toggleBtn.textContent = '展开▲';
+                toggleBtn.textContent = '收起▲';
             } else {
                 textItems.classList.remove('collapsed');
                 textItems.classList.add('expanded');
-                toggleBtn.textContent = '收起▼';
+                toggleBtn.textContent = '展开▼';
             }
         }
 
