@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 聊天聚合</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: #ffffff;
+            box-shadow: 2px 0 10px var(--shadow-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+            padding: 20px 10px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-left: 40px;  /* 为收起按钮留出空间 */
+        }
+
+        .sidebar h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .content {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        iframe.active {
+            display: block;
+        }
+
+        .stats {
+            margin-top: 20px;
+            height: 220px;
+        }
+
+        .clock {
+            width: 120px;
+            height: 120px;
+            border: 3px solid var(--primary-color);
+            border-radius: 50%;
+            position: relative;
+            margin: 20px auto;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+
+        .clock-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hand {
+            position: absolute;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+        }
+
+        .hour-hand {
+            width: 35%;
+            height: 4px;
+            background: #ff6b6b;
+            left: 15%;
+        }
+
+        .min-hand {
+            width: 45%;
+            height: 3px;
+            background: #4ecdc4;
+            left: 5%;
+        }
+
+        .second-hand {
+            width: 50%;
+            height: 2px;
+            background: #45b7d1;
+            left: 0;
+        }
+
+        #toggleSidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        #toggleSidebar:hover {
+            background: #3a7cbd;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: var(--primary-color);
+            font-family: "黑体", SimHei, Arial, sans-serif;
+            display: none;
+        }
+
+        .sidebar.collapsed .vertical-text {
+            display: block;
+        }
+
+        .sortable-item {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .sortable-item:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .drag-hint {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .update-log {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .update-log:hover {
+            color: #3a7cbd;
+        }
+
+        .update-log-content {
+            display: none;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+
+        .update-log-content h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .update-log-content ol {
+            padding-left: 20px;
+        }
+
+        .update-log-content li {
+            margin-bottom: 5px;
+        }
+
+        .edit-slider-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            align-self: center;
+        }
+
+        .text-storage {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-container input,
+        .input-container textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .input-container textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-container button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .add-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .export-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .import-btn {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        .button-container button:hover {
+            opacity: 0.8;
+        }
+
+        #textItems {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .text-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .text-item h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+
+        .text-item p {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+        }
+
+        .text-item button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .text-item button:hover {
+            opacity: 0.8;
+        }
+
+        .text-item {
+            margin-bottom: 10px;
+        }
+
+        .text-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .text-item-content {
+            display: none;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .text-item.expanded .text-item-content {
+            display: block;
+        }
+
+        .slider-edit-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="toggleSidebar">☰</button>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2 id="sidebarTitle">AI 聚合V0.0.5</h2>
+            </div>
+            <ul id="sidebarLinks">
+                <li><a href="#" onclick="changeIframe('ChatGLM')">ChatGLM</a></li>
+                <li><a href="#" onclick="changeIframe('Kimi')">Kimi</a></li>
+                <li><a href="#" onclick="changeIframe('DeepSeek')">DeepSeek</a></li>
+                <li><a href="#" onclick="changeIframe('HailuoAI')">HailuoAI</a></li>
+            </ul>
+            <div id="sortableContainer">
+                <!-- 滑块将在这里动态生成 -->
+            </div>
+            <button class="edit-slider-btn" onclick="openSliderEditModal()">编辑滑块</button>
+            <div class="drag-hint">滑块可拖动排序哦～</div>
+            <div class="update-log" id="updateLog" onclick="toggleUpdateLog()">更新日志</div>
+            <div class="update-log-content" id="updateLogContent">
+                <h4>V0.0.5:</h4>
+                <ol>
+                    <li>增加滑块编辑功能</li>
+                    <li>新增文本存储滑块</li>
+                    <li>浅浅优化了UI</li>
+                </ol>
+            </div>
+            <div class="vertical-text">让自己快乐快乐这才叫做意义</div>
+        </div>
+        <div class="content">
+            <iframe id="ChatGLM" src="https://chatglm.cn/" class="active"></iframe>
+            <iframe id="Kimi" src="https://kimi.moonshot.cn/"></iframe>
+            <iframe id="DeepSeek" src="https://chat.deepseek.com/"></iframe>
+            <iframe id="HailuoAI" src="https://hailuoai.com/"></iframe>
+        </div>
+    </div>
+
+    <div id="sliderEditModal" class="slider-edit-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSliderEditModal()">&times;</span>
+            <h2>编辑滑块</h2>
+            <div id="sliderCheckboxes"></div>
+            <button onclick="saveSliderSettings()">保存设置</button>
+        </div>
+    </div>
+
+    <script>
+        let usage = {
+            'ChatGLM': 0,
+            'Kimi': 0,
+            'DeepSeek': 0,
+            'HailuoAI': 0
+        };
+
+        let startTime;
+        let currentSite = 'ChatGLM';
+        let chart;
+
+        // 滑块配置
+        const sliderConfigs = {
+            stats: {
+                title: "使用时长统计",
+                content: `<div class="stats"><canvas id="usageChart"></canvas></div>`
+            },
+            clock: {
+                title: "时钟",
+                content: `<div class="clock">
+                            <div class="clock-face">
+                                <div class="hand hour-hand"></div>
+                                <div class="hand min-hand"></div>
+                                <div class="hand second-hand"></div>
+                            </div>
+                          </div>`
+            },
+            textStorage: {
+                title: "文本存储",
+                content: `
+                    <div class="text-storage">
+                        <div class="input-container">
+                            <input type="text" id="newTextTitle" placeholder="输入标题">
+                            <textarea id="newTextContent" placeholder="输入内容"></textarea>
+                        </div>
+                        <div class="button-container">
+                            <button onclick="addTextItem()" class="add-btn">添加</button>
+                            <button onclick="exportCSV()" class="export-btn">导出CSV</button>
+                            <input type="file" id="csvFile" accept=".csv" style="display:none;" onchange="importCSV()">
+                            <button onclick="document.getElementById('csvFile').click()" class="import-btn">导入CSV</button>
+                        </div>
+                        <div id="textItems"></div>
+                    </div>`
+            }
+        };
+
+        function exportCSV() {
+            let csv = "\uFEFFTitle,Content\n"; // 添加BOM
+            const textItems = document.querySelectorAll('.text-item-header, .text-item-content');
+            console.log("找到的文本项数量：", textItems.length / 2); // 调试信息
+
+            if (textItems.length === 0) {
+                alert("没有可导出的文本项");
+                return;
+            }
+
+            for (let i = 0; i < textItems.length; i += 2) {
+                const titleElement = textItems[i].querySelector('span:first-child');
+                const contentElement = textItems[i+1].querySelector('p');
+
+                if (!titleElement || !contentElement) {
+                    console.error(`第 ${i/2 + 1} 个项目结构不正确:`, textItems[i].innerHTML, textItems[i+1].innerHTML);
+                    continue; // 跳过这个项目
+                }
+
+                const title = titleElement.textContent.trim();
+                const content = contentElement.textContent.trim();
+                csv += `"${title.replace(/"/g, '""')}","${content.replace(/"/g, '""')}"\n`;
+            }
+
+            if (csv === "Title,Content\n") {
+                alert("没有有效的文本项可以导出");
+                return;
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "text_storage.csv");
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function parseCSV(text) {
+            const result = [];
+            let row = [];
+            let cell = "";
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (inQuotes) {
+                    if (char === '"') {
+                        if (text[i + 1] === '"') {
+                            cell += '"';
+                            i++;
+                        } else {
+                            inQuotes = false;
+                        }
+                    } else {
+                        cell += char;
+                    }
+                } else {
+                    if (char === '"') {
+                        inQuotes = true;
+                    } else if (char === ',') {
+                        row.push(cell.trim());
+                        cell = "";
+                    } else if (char === '\n' || char === '\r') {
+                        if (cell !== "" || row.length > 0) {
+                            row.push(cell.trim());
+                            result.push(row);
+                            row = [];
+                            cell = "";
+                        }
+                    } else {
+                        cell += char;
+                    }
+                }
+            }
+            if (cell !== "" || row.length > 0) {
+                row.push(cell.trim());
+                result.push(row);
+            }
+            return result;
+        }
+
+        function importCSV() {
+            console.log("导入函数被调用");
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    console.log("CSV内容读取: ", content);
+
+                    const rows = parseCSV(content);
+                    console.log("CSV行数: ", rows.length);
+                    let importedCount = 0;
+
+                    // 跳过标题行
+                    for (let i = 1; i < rows.length; i++) {
+                        const [title, text] = rows[i];
+                        console.log("解析后的标题: ", title, "内容: ", text);
+                        if (title && text) {
+                            if (addTextItem(title, text)) {
+                                importedCount++;
+                                console.log("成功添加项目");
+                            } else {
+                                console.log("添加项目失败");
+                            }
+                        } else {
+                            console.log("标题或内容为空，跳过");
+                        }
+                    }
+
+                    console.log(`导入完成，成功导入 ${importedCount} 个项目`);
+                    alert(`成功导入 ${importedCount} 个文本项`);
+                    fileInput.value = '';
+                };
+                reader.readAsText(file, 'UTF-8');
+            } else {
+                alert('请选择一个CSV文件');
+            }
+        }
+
+        function addTextItem(title, content) {
+            console.log("尝试添加项目:", title, content);
+            title = title || document.getElementById('newTextTitle').value.trim();
+            content = content || document.getElementById('newTextContent').value.trim();
+
+            if (title && content) {
+                console.log("标题和内容验证通过");
+                const textItems = document.getElementById('textItems');
+                if (!textItems) {
+                    console.error("无法找到textItems容器");
+                    return false;
+                }
+                console.log("找到textItems容器");
+
+                try {
+                    // 保存到本地存储
+                    const items = JSON.parse(localStorage.getItem('textItems')) || [];
+                    items.push({ title, content });
+                    localStorage.setItem('textItems', JSON.stringify(items));
+                    console.log("成功保存到本地存储");
+
+                    // 重新加载所有项目
+                    loadTextItems();
+
+                    // 清空输入框
+                    document.getElementById('newTextTitle').value = '';
+                    document.getElementById('newTextContent').value = '';
+
+                    return true;
+                } catch (error) {
+                    console.error("添加项目时发生错误:", error);
+                    return false;
+                }
+            } else {
+                console.log("添加失败：标题或内容为空");
+                return false;
+            }
+        }
+
+
+        function changeIframe(site) {
+            if (currentSite) {
+                usage[currentSite] += Math.round((Date.now() - startTime) / 1000);
+                document.getElementById(currentSite).classList.remove('active');
+            }
+            document.getElementById(site).classList.add('active');
+            startTime = Date.now();
+            currentSite = site;
+            updateChart();
+        }
+        function initSlidersWithoutChart() {
+            const container = document.getElementById('sortableContainer');
+            const statsSlider = container.querySelector('#statsContainer');
+            const chartCanvas = document.getElementById('usageChart');
+
+            // 暂时移除图表容器
+            if (statsSlider) {
+                statsSlider.remove();
+            }
+
+            // 清空容器
+            container.innerHTML = '';
+
+            const activeSliders = JSON.parse(localStorage.getItem('activeSliders')) || Object.keys(sliderConfigs);
+
+            activeSliders.forEach(sliderId => {
+                const slider = sliderConfigs[sliderId];
+                if (slider) {
+                    const sliderElement = document.createElement('div');
+                    sliderElement.className = 'sortable-item';
+                    sliderElement.id = sliderId + 'Container';
+                    sliderElement.innerHTML = `<h3>${slider.title}</h3>${slider.content}`;
+                    container.appendChild(sliderElement);
+                }
+            });
+
+            // 如果存在统计滑块，重新插入图表
+            const newStatsSlider = container.querySelector('#statsContainer');
+            if (newStatsSlider && chartCanvas) {
+                const statsContent = newStatsSlider.querySelector('.stats');
+                statsContent.innerHTML = ''; // 清空内容
+                statsContent.appendChild(chartCanvas); // 重新插入图表
+            }
+
+            setDate();
+            loadTextItems();
+        }
+
+        function updateChart() {
+            const ctx = document.getElementById('usageChart');
+            if (!ctx) return;
+
+            const chartContext = ctx.getContext('2d');
+
+            if (chart) {
+                // 更新现有图表的数据
+                chart.data.datasets[0].data = Object.values(usage);
+                chart.update();
+            } else {
+                // 如果图表不存在，则创建新图表
+                chart = new Chart(chartContext, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(usage),
+                        datasets: [{
+                            data: Object.values(usage),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 206, 86, 0.8)',
+                                'rgba(75, 192, 192, 0.8)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: false
+                            },
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    padding: 15,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+            }
+        }
+
+
+        function setDate() {
+            const clockFace = document.querySelector('.clock-face');
+            if (!clockFace) return;
+            const now = new Date();
+
+            const seconds = now.getSeconds();
+            const secondsDegrees = ((seconds / 60) * 360) + 90;
+            clockFace.querySelector('.second-hand').style.transform = `rotate(${secondsDegrees}deg)`;
+
+            const mins = now.getMinutes();
+            const minsDegrees = ((mins / 60) * 360) + ((seconds/60)*6) + 90;
+            clockFace.querySelector('.min-hand').style.transform = `rotate(${minsDegrees}deg)`;
+
+            const hour = now.getHours();
+            const hourDegrees = ((hour / 12) * 360) + ((mins/60)*30) + 90;
+            clockFace.querySelector('.hour-hand').style.transform = `rotate(${hourDegrees}deg)`;
+        }
+
+        function initSliders() {
+            const container = document.getElementById('sortableContainer');
+            container.innerHTML = '';
+
+            const activeSliders = JSON.parse(localStorage.getItem('activeSliders')) || Object.keys(sliderConfigs);
+
+            activeSliders.forEach(sliderId => {
+                const slider = sliderConfigs[sliderId];
+                if (slider) {
+                    const sliderElement = document.createElement('div');
+                    sliderElement.className = 'sortable-item';
+                    sliderElement.id = sliderId + 'Container';
+                    sliderElement.innerHTML = `<h3>${slider.title}</h3>${slider.content}`;
+                    container.appendChild(sliderElement);
+                }
+            });
+
+            setDate();
+            loadTextItems();
+
+            // 重新初始化使用时间统计
+            startTime = Date.now();
+            usage = {
+                'ChatGLM': 0,
+                'Kimi': 0,
+                'DeepSeek': 0,
+                'HailuoAI': 0
+            };
+
+            // 在所有滑块加载完成后，重新初始化图表
+            setTimeout(updateChart, 0);
+        }
+
+        function openSliderEditModal() {
+            const modal = document.getElementById('sliderEditModal');
+            const checkboxesContainer = document.getElementById('sliderCheckboxes');
+            checkboxesContainer.innerHTML = '';
+
+            const activeSliders = JSON.parse(localStorage.getItem('activeSliders')) || Object.keys(sliderConfigs);
+
+            Object.keys(sliderConfigs).forEach(sliderId => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = sliderId + 'Checkbox';
+                checkbox.checked = activeSliders.includes(sliderId);
+
+                const label = document.createElement('label');
+                label.htmlFor = sliderId + 'Checkbox';
+                label.textContent = sliderConfigs[sliderId].title;
+
+                checkboxesContainer.appendChild(checkbox);
+                checkboxesContainer.appendChild(label);
+                checkboxesContainer.appendChild(document.createElement('br'));
+            });
+
+            modal.style.display = 'block';
+        }
+
+        function closeSliderEditModal() {
+            document.getElementById('sliderEditModal').style.display = 'none';
+        }
+
+        function saveSliderSettings() {
+            const activeSliders = [];
+            Object.keys(sliderConfigs).forEach(sliderId => {
+                const checkbox = document.getElementById(sliderId + 'Checkbox');
+                if (checkbox.checked) {
+                    activeSliders.push(sliderId);
+                }
+            });
+
+            localStorage.setItem('activeSliders', JSON.stringify(activeSliders));
+            initSlidersWithoutChart();
+            closeSliderEditModal();
+        }
+
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function loadTextItems() {
+            const container = document.getElementById('textItems');
+            if (!container) return;
+
+            container.innerHTML = '';
+            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+            items.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'text-item';
+                itemElement.innerHTML = `
+                    <div class="text-item-header" onclick="toggleTextItem(${index})">
+                        <span>${escapeHtml(item.title)}</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="text-item-content">
+                        <p>${escapeHtml(item.content)}</p>
+                        <button onclick="copyTextItem(${index})">复制</button>
+                        <button onclick="deleteTextItem(${index})">删除</button>
+                    </div>
+                `;
+                container.appendChild(itemElement);
+            });
+        }
+
+
+        function toggleTextItem(index) {
+            console.log("切换项目显示:", index);
+            const items = document.querySelectorAll('.text-item');
+            items[index].classList.toggle('expanded');
+        }
+
+        function copyTextItem(index) {
+            console.log("复制项目:", index);
+            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+            const text = items[index].content;
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('文本已复制到剪贴板');
+                alert('文本已复制到剪贴板');
+            });
+        }
+
+        function deleteTextItem(index) {
+            console.log("删除项目:", index);
+            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+            items.splice(index, 1);
+            localStorage.setItem('textItems', JSON.stringify(items));
+            loadTextItems();
+        }
+
+                function toggleUpdateLog() {
+            updateLogContent.style.display = updateLogContent.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // 侧边栏收起功能
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebarTitle = document.getElementById('sidebarTitle');
+        const sidebarLinks = document.getElementById('sidebarLinks');
+        const sortableContainer = document.getElementById('sortableContainer');
+        const dragHint = document.querySelector('.drag-hint');
+        const updateLog = document.getElementById('updateLog');
+        const updateLogContent = document.getElementById('updateLogContent');
+        const editSliderBtn = document.querySelector('.edit-slider-btn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            sidebarTitle.classList.toggle('hidden');
+            sidebarLinks.classList.toggle('hidden');
+            sortableContainer.classList.toggle('hidden');
+            dragHint.classList.toggle('hidden');
+            updateLog.classList.toggle('hidden');
+            updateLogContent.classList.toggle('hidden');
+            editSliderBtn.classList.toggle('hidden');
+            toggleBtn.textContent = sidebar.classList.contains('collapsed') ? '☰' : '×';
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initSliders();
+            setInterval(() => {
+                setDate();
+                if (currentSite) {
+                    usage[currentSite] = Math.round((Date.now() - startTime) / 1000);
+                    updateChart();
+                }
+            }, 1000);
+
+            // 初始化可拖动排序
+        new Sortable(sortableContainer, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            onEnd: function() {
+                const newOrder = Array.from(sortableContainer.children).map(item => item.id.replace('Container', ''));
+                localStorage.setItem('activeSliders', JSON.stringify(newOrder));
+                initSlidersWithoutChart(); // 使用新的初始化函数
+            }
+        });
+
+            // 添加一些动画效果
+            document.querySelectorAll('.sidebar a, .sortable-item, .update-log').forEach(element => {
+                element.addEventListener('mouseover', () => {
+                    element.style.transform = 'scale(1.05)';
+                });
+                element.addEventListener('mouseout', () => {
+                    element.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
