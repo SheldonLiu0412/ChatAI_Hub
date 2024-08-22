@@ -129,12 +129,12 @@
         .clock {
             width: 120px;
             height: 120px;
-            border: 3px solid var(--primary-color);
+            border: 3px solid #4a90e2; /* 冷色系边框 */
             border-radius: 50%;
             position: relative;
             margin: 20px auto;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px var(--shadow-color);
+            background-color: #f0f8ff; /* 淡蓝色背景 */
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴�� */
         }
 
         .clock-face {
@@ -155,22 +155,42 @@
         .hour-hand {
             width: 35%;
             height: 4px;
-            background: #ff6b6b;
+            background: #3d7ebd; /* 深蓝色时针 */
             left: 15%;
         }
 
         .min-hand {
             width: 45%;
             height: 3px;
-            background: #4ecdc4;
+            background: #5da0e4; /* 中蓝色分针 */
             left: 5%;
         }
 
         .second-hand {
             width: 50%;
             height: 2px;
-            background: #45b7d1;
+            background: #7cb9f1; /* 浅蓝色秒针 */
             left: 0;
+        }
+
+        .clock-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4a90e2;
+            transform: translate(-50%, -50%);
+        }
+
+        .clock-number {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 5px; /* 调整到顶部 */
+            font-size: 14px;
+            color: #4a90e2;
         }
 
         #toggleSidebar {
@@ -462,6 +482,7 @@
             background-color: #f8f9fa;
             border-radius: 8px;
             transition: background-color 0.3s;
+            cursor: pointer;
         }
 
         .checkbox-item:hover {
@@ -640,6 +661,7 @@
             background-color: #f8f9fa;
             border-radius: 8px;
             transition: background-color 0.3s;
+            cursor: pointer;
         }
 
         .checkbox-item:hover {
@@ -676,6 +698,118 @@
         .save-btn:hover {
             background-color: #0056b3;
         }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: flex-start; /* 改为左对齐 */
+            align-items: center; /* 垂直居中 */
+            margin-bottom: 20px;
+            padding: 10px 15px; /* 左右添加内边距,与下方按钮对齐 */
+        }
+
+        #toggleSidebar {
+            margin-right: 10px; /* 在按钮和标题之间添加一些间距 */
+            background: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header h2 {
+            font-family: 'American Typewriter', 'Courier New', monospace;
+            font-weight: normal;
+            color: var(--primary-color);
+            font-size: 24px;
+            margin: 0;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .sidebar-header h2 .version {
+            font-size: 16px;
+            color: #999;
+            margin-left: 5px;
+        }
+
+        /* 确保下方网址按钮的左边距与header一致 */
+        .sidebar ul {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .sidebar a {
+            /* 保持原有样式 */
+        }
+
+        .clock {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #4a90e2; /* 冷色系边框 */
+            border-radius: 50%;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f0f8ff; /* 淡蓝色背景 */
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴影 */
+        }
+
+        .clock-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hand {
+            position: absolute;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+        }
+
+        .hour-hand {
+            width: 35%;
+            height: 4px;
+            background: #3d7ebd; /* 深蓝色时针 */
+            left: 15%;
+        }
+
+        .min-hand {
+            width: 45%;
+            height: 3px;
+            background: #5da0e4; /* 中蓝色分针 */
+            left: 5%;
+        }
+
+        .second-hand {
+            width: 50%;
+            height: 2px;
+            background: #7cb9f1; /* 浅蓝色秒针 */
+            left: 0;
+        }
+
+        .clock-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4a90e2;
+            transform: translate(-50%, -50%);
+        }
+
+        .clock-number {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 5px; /* 调整到顶部 */
+            font-size: 14px;
+            color: #4a90e2;
+        }
     </style>
 
     <script>
@@ -703,6 +837,8 @@
                                 <div class="hand hour-hand"></div>
                                 <div class="hand min-hand"></div>
                                 <div class="hand second-hand"></div>
+                                <div class="clock-center"></div>
+                                <div class="clock-number">12</div>
                             </div>
                           </div>`
             },
@@ -722,7 +858,7 @@
                             <button onclick="addTextItem()" class="add-btn">添加</button>
                             <button onclick="exportCSV()" class="export-btn">导出CSV</button>
                             <button onclick="document.getElementById('csvFile').click()" class="import-btn">导入CSV</button>
-                            <button onclick="clearAllTextItems()" class="clear-btn">清空所有</button>
+                            <button onclick="clearAllTextItems()" class="clear-btn">清空有</button>
                             <input type="file" id="csvFile" accept=".csv" style="display:none;" onchange="importCSV()">
                         </div>
                         <div id="textItems" class="expanded"></div>
@@ -745,7 +881,7 @@
                 const contentElement = textItems[i+1].querySelector('p');
 
                 if (!titleElement || !contentElement) {
-                    console.error(`第 ${i/2 + 1} 个项目结构不正���:`, textItems[i].innerHTML, textItems[i+1].innerHTML);
+                    console.error(`第 ${i/2 + 1} 个项目结构不正:`, textItems[i].innerHTML, textItems[i+1].innerHTML);
                     continue; // 跳过这个项目
                 }
 
@@ -855,7 +991,7 @@
         }
 
         function addTextItem(title, content) {
-            console.log("尝试添加项目:", title, content);
+            console.log("尝试添加项:", title, content);
             title = title || document.getElementById('newTextTitle').value.trim();
             content = content || document.getElementById('newTextContent').value.trim();
 
@@ -873,7 +1009,7 @@
                     const items = JSON.parse(localStorage.getItem('textItems')) || [];
                     items.push({ title, content });
                     localStorage.setItem('textItems', JSON.stringify(items));
-                    console.log("成功保存到本地存储");
+                    console.log("成功保存本地存储");
 
                     // 重新加载所有项目
                     loadTextItems();
@@ -884,7 +1020,7 @@
 
                     return true;
                 } catch (error) {
-                    console.error("添加项目时发生错误:", error);
+                    console.error("添加项目时发生误:", error);
                     return false;
                 }
             } else {
@@ -909,7 +1045,7 @@
             const statsSlider = container.querySelector('#statsContainer');
             const chartCanvas = document.getElementById('usageChart');
 
-            // 暂时移除图表容器
+            // 暂移除图表容器
             if (statsSlider) {
                 statsSlider.remove();
             }
@@ -1078,6 +1214,15 @@
 
                 checkboxItem.appendChild(checkbox);
                 checkboxItem.appendChild(label);
+
+                // 为整个checkbox-item添加点击事件
+                checkboxItem.addEventListener('click', function(event) {
+                    // 防止点击checkbox时触发两次
+                    if (event.target !== checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                });
+
                 checkboxesContainer.appendChild(checkboxItem);
             });
 
@@ -1229,7 +1374,7 @@
                 }
             }, 1000);
 
-            // 初始化可拖动排序
+            // 始化可拖动排序
         new Sortable(sortableContainer, {
             animation: 150,
             ghostClass: 'sortable-ghost',
@@ -1253,7 +1398,7 @@
             // 使用事件委托，将事件监听器添加到父元素上
             document.getElementById('sortableContainer').addEventListener('click', toggleTextItems);
 
-            // 初���化时更新按钮状态
+            // 初化时更新按钮状态
             updateToggleButtonState();
         });
 
