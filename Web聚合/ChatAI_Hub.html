@@ -398,28 +398,91 @@
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            background-color: #ffffff;
+            margin: 10% auto;
+            padding: 0;
+            border: none;
+            width: 90%;
+            max-width: 400px;
             border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
         }
 
         .close {
             color: #aaa;
-            float: right;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
+        .modal-body {
+            padding: 20px;
+        }
+
+        #sliderCheckboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .checkbox-item label {
+            font-size: 16px;
+            color: #333;
             cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        .save-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #0056b3;
         }
 
         .text-storage-header {
@@ -486,10 +549,16 @@
 
     <div id="sliderEditModal" class="slider-edit-modal">
         <div class="modal-content">
-            <span class="close" onclick="closeSliderEditModal()">&times;</span>
-            <h2>编辑滑块</h2>
-            <div id="sliderCheckboxes"></div>
-            <button onclick="saveSliderSettings()">保存设置</button>
+            <div class="modal-header">
+                <h2>编辑滑块</h2>
+                <span class="close" onclick="closeSliderEditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="sliderCheckboxes"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="saveSliderSettings()" class="save-btn">保存设置</button>
+            </div>
         </div>
     </div>
 
@@ -548,7 +617,7 @@
         function exportCSV() {
             let csv = "\uFEFFTitle,Content\n"; // 添加BOM
             const textItems = document.querySelectorAll('.text-item-header, .text-item-content');
-            console.log("找到的文本项数量：", textItems.length / 2); // 调试信息
+            console.log("找到���文本项数量：", textItems.length / 2); // 调试信息
 
             if (textItems.length === 0) {
                 alert("没有可导出的文本项");
@@ -879,6 +948,9 @@
             const activeSliders = JSON.parse(localStorage.getItem('activeSliders')) || Object.keys(sliderConfigs);
 
             Object.keys(sliderConfigs).forEach(sliderId => {
+                const checkboxItem = document.createElement('div');
+                checkboxItem.className = 'checkbox-item';
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.id = sliderId + 'Checkbox';
@@ -888,9 +960,9 @@
                 label.htmlFor = sliderId + 'Checkbox';
                 label.textContent = sliderConfigs[sliderId].title;
 
-                checkboxesContainer.appendChild(checkbox);
-                checkboxesContainer.appendChild(label);
-                checkboxesContainer.appendChild(document.createElement('br'));
+                checkboxItem.appendChild(checkbox);
+                checkboxItem.appendChild(label);
+                checkboxesContainer.appendChild(checkboxItem);
             });
 
             modal.style.display = 'block';
