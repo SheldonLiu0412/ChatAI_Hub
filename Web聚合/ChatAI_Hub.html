@@ -47,21 +47,38 @@
 
         .sidebar-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: flex-start; /* 改为左对齐 */
+            align-items: center; /* 垂直居中 */
             margin-bottom: 20px;
-            padding-left: 40px;  /* 为收起按钮留出空间 */
+            padding: 10px 15px; /* 左右添加内边距,与下方按钮对齐 */
         }
 
-        .sidebar h2 {
-            margin: 0;
+        @font-face {
+            font-family: 'American Typewriter';
+            src: url('path/to/AmericanTypewriter.ttf') format('truetype');
+        }
+
+        .sidebar-header h2 {
+            font-family: 'American Typewriter', 'Courier New', monospace;
+            font-weight: normal;
             color: var(--primary-color);
             font-size: 24px;
+            margin: 0;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .sidebar-header h2 .version {
+            font-size: 16px;
+            color: #999;
+            margin-left: 5px;
         }
 
         .sidebar ul {
             list-style-type: none;
             padding: 0;
+            padding-left: 15px; /* 确保下方网址按钮的左边距与header一致 */
+            padding-right: 15px;
         }
 
         .sidebar li {
@@ -157,10 +174,7 @@
         }
 
         #toggleSidebar {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
+            margin-right: 10px; /* 在按钮和标题之间添加一些间距 */
             background: var(--primary-color);
             color: #ffffff;
             border: none;
@@ -512,10 +526,10 @@
 </head>
 <body>
     <div class="container">
-        <button id="toggleSidebar">☰</button>
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2 id="sidebarTitle">ChatAI HubV0.0.5</h2>
+                <button id="toggleSidebar">☰</button>
+                <h2 id="sidebarTitle">ChatAI Hub<span class="version">V0.0.5</span></h2>
             </div>
             <ul id="sidebarLinks">
                 <li><a href="#" onclick="changeIframe('ChatGLM')">ChatGLM</a></li>
@@ -561,6 +575,108 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .slider-edit-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 10% auto;
+            padding: 0;
+            border: none;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        #sliderCheckboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .checkbox-item label {
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        .save-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 
     <script>
         let usage = {
@@ -617,7 +733,7 @@
         function exportCSV() {
             let csv = "\uFEFFTitle,Content\n"; // 添加BOM
             const textItems = document.querySelectorAll('.text-item-header, .text-item-content');
-            console.log("找到���文本项数量：", textItems.length / 2); // 调试信息
+            console.log("找到文本项数量：", textItems.length / 2); // 调信息
 
             if (textItems.length === 0) {
                 alert("没有可导出的文本项");
@@ -629,7 +745,7 @@
                 const contentElement = textItems[i+1].querySelector('p');
 
                 if (!titleElement || !contentElement) {
-                    console.error(`第 ${i/2 + 1} 个项目结构不正确:`, textItems[i].innerHTML, textItems[i+1].innerHTML);
+                    console.error(`第 ${i/2 + 1} 个项目结构不正���:`, textItems[i].innerHTML, textItems[i+1].innerHTML);
                     continue; // 跳过这个项目
                 }
 
@@ -719,7 +835,7 @@
                         if (title && text) {
                             if (addTextItem(title, text)) {
                                 importedCount++;
-                                console.log("成功添加项目");
+                                console.log("功添加项目");
                             } else {
                                 console.log("添加项目失败");
                             }
@@ -750,7 +866,7 @@
                     console.error("无法找到textItems容器");
                     return false;
                 }
-                console.log("找到textItems容器");
+                console.log("找到textItems容");
 
                 try {
                     // 保存到本地存储
@@ -1048,7 +1164,7 @@
         function clearAllTextItems() {
             const items = JSON.parse(localStorage.getItem('textItems')) || [];
             if (items.length === 0) {
-                alert('没有可清空的文本项');
+                alert('没有可清空的文项');
                 return;
             }
 
@@ -1137,7 +1253,7 @@
             // 使用事件委托，将事件监听器添加到父元素上
             document.getElementById('sortableContainer').addEventListener('click', toggleTextItems);
 
-            // 初始化时更新按钮状态
+            // 初���化时更新按钮状态
             updateToggleButtonState();
         });
 
