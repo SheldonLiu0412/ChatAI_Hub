@@ -1449,8 +1449,8 @@
             </div>
             <button class="edit-slider-btn" onclick="openSliderEditModal()">编辑滑块</button>
             <div class="drag-hint">滑块可拖动排序哦～</div>
-            <div class="update-log" id="updateLog" onclick="toggleUpdateLog()">更新日志</div>
-            <div class="update-log-content" id="updateLogContent">
+            <div class="update-log" id="updateLog">更新日志</div>
+            <div class="update-log-content" id="updateLogContent" style="display: none;">
                 <h4>V0.0.5:</h4>
                 <ol>
                     <li>优化滑块编辑功能UI</li>
@@ -2601,6 +2601,17 @@
             if (cancelClearButton) {
                 cancelClearButton.addEventListener('click', hideConfirmClearModal);
             }
+
+            // 使用事件委托来处理更新日志的点击
+            document.querySelector('.sidebar').addEventListener('click', function(event) {
+                if (event.target.id === 'updateLog') {
+                    toggleUpdateLog();
+                }
+            });
+
+            // 初始化更新日志的显示状态
+            const updateLogContent = document.getElementById('updateLogContent');
+            updateLogContent.style.display = 'none';
         });
 
         // 添加一个新函数来更新按钮状态
