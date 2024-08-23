@@ -53,9 +53,558 @@
             padding: 10px 15px; /* 左右添加内边距,与下方按钮对齐 */
         }
 
-        @font-face {
-            font-family: 'American Typewriter';
-            src: url('path/to/AmericanTypewriter.ttf') format('truetype');
+        .sidebar-header h2 {
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* 更换为更圆滑的无衬线字体 */
+            font-weight: 500; /* 稍微加粗一点 */
+            color: var(--primary-color);
+            font-size: 24px; /* 略微增大字号 */
+            margin: 0;
+            display: flex;
+            align-items: baseline;
+            white-space: nowrap; /* 防止文字换行 */
+        }
+
+        .sidebar-header h2 .version {
+            font-size: 14px; /* 稍微缩小版本号字体 */
+            color: #999;
+            margin-left: 5px;
+        }
+
+        /* 调整侧边栏宽度，确保标题不会换行 */
+        .sidebar {
+            width: 300px; /* 增加宽度 */
+        }
+
+        /* 调整折叠时的宽度 */
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            padding-left: 15px; /* 确保下方网址按钮的左边距与header一致 */
+            padding-right: 15px;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .content {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        iframe.active {
+            display: block;
+        }
+
+        .stats {
+            margin-top: 20px;
+            height: 220px;
+        }
+
+        .clock {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #4a90e2; /* 冷色系边框 */
+            border-radius: 50%;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f0f8ff; /* 淡蓝色背景 */
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴 */
+        }
+
+        .clock-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hand {
+            position: absolute;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+        }
+
+        .hour-hand {
+            width: 35%;
+            height: 4px;
+            background: #3d7ebd; /* 深蓝色时针 */
+            left: 15%;
+        }
+
+        .min-hand {
+            width: 45%;
+            height: 3px;
+            background: #5da0e4; /* 中蓝色分针 */
+            left: 5%;
+        }
+
+        .second-hand {
+            width: 50%;
+            height: 2px;
+            background: #7cb9f1; /* 浅蓝色秒针 */
+            left: 0;
+        }
+
+        .clock-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4a90e2;
+            transform: translate(-50%, -50%);
+        }
+
+        .clock-number {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 5px; /* 调整到顶部 */
+            font-size: 14px;
+            color: #4a90e2;
+        }
+
+        #toggleSidebar {
+            margin-right: 10px; /* 在按钮和标题之间添加一些间距 */
+            background: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        #toggleSidebar:hover {
+            background: #3a7cbd;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: var(--primary-color);
+            font-family: "黑体", SimHei, Arial, sans-serif;
+            display: none;
+        }
+
+        .sidebar.collapsed .vertical-text {
+            display: block;
+        }
+
+        .sortable-item {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .sortable-item:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .drag-hint {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .update-log {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .update-log:hover {
+            color: #3a7cbd;
+        }
+
+        .update-log-content {
+            display: none;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+
+        .update-log-content h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .update-log-content ol {
+            padding-left: 20px;
+        }
+
+        .update-log-content li {
+            margin-bottom: 5px;
+        }
+
+        .edit-slider-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            align-self: center;
+        }
+
+        .text-storage {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-container input,
+        .input-container textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .input-container textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .button-container button {
+            flex: 1 1 auto;
+            min-width: calc(50% - 5px); /* 确保每行至少有两个按钮 */
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+
+        .add-btn { background-color: #4CAF50; color: white; }
+        .export-btn { background-color: #2196F3; color: white; }
+        .import-btn { background-color: #FF9800; color: white; }
+        .clear-btn { background-color: #f44336; color: white; }
+
+        .button-container button:hover {
+            opacity: 0.8;
+        }
+
+        #textItems {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .text-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .text-item h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+
+        .text-item p {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+        }
+
+        .text-item button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .text-item button:hover {
+            opacity: 0.8;
+        }
+
+        .text-item {
+            margin-bottom: 10px;
+        }
+
+        .text-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .text-item-content {
+            display: none;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .text-item.expanded .text-item-content {
+            display: block;
+        }
+
+        .slider-edit-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 10% auto;
+            padding: 0;
+            border: none;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        #sliderCheckboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .checkbox-item label {
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        .save-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .text-storage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        #textItems.collapsed {
+            display: none;
+        }
+
+        #textItems.expanded {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatAI Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: #ffffff;
+            box-shadow: 2px 0 10px var(--shadow-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+            padding: 20px 10px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: flex-start; /* 改为左对齐 */
+            align-items: center; /* 垂直居中 */
+            margin-bottom: 20px;
+            padding: 10px 15px; /* 左右添加内边距,与下方按钮对齐 */
         }
 
         .sidebar-header h2 {
@@ -715,7 +1264,7 @@
             justify-content: flex-start; /* 改为左对齐 */
             align-items: center; /* 垂直居中 */
             margin-bottom: 20px;
-            padding: 10px 15px; /* 左右添加内边距,与下方按钮对齐 */
+            padding: 10px 15px; /* 左右添加内边距,与下方按钮对 */
         }
 
         #toggleSidebar {
@@ -1066,15 +1615,6 @@
         }
         function initSlidersWithoutChart() {
             const container = document.getElementById('sortableContainer');
-            const statsSlider = container.querySelector('#statsContainer');
-            const chartCanvas = document.getElementById('usageChart');
-
-            // 暂移除图表容器
-            if (statsSlider) {
-                statsSlider.remove();
-            }
-
-            // 清空容器
             container.innerHTML = '';
 
             const activeSliders = JSON.parse(localStorage.getItem('activeSliders')) || Object.keys(sliderConfigs);
@@ -1090,74 +1630,86 @@
                 }
             });
 
-            // 如果存在统计滑块，重新插入图表
-            const newStatsSlider = container.querySelector('#statsContainer');
-            if (newStatsSlider && chartCanvas) {
-                const statsContent = newStatsSlider.querySelector('.stats');
-                statsContent.innerHTML = ''; // 清空内容
-                statsContent.appendChild(chartCanvas); // 重新插入图表
-            }
-
             setDate();
             loadTextItems();
+
+            // 如果存在统计滑块，���新初始化图表
+            if (activeSliders.includes('stats')) {
+                // 使用 setTimeout 确保在 DOM 更新后初始化图表
+                setTimeout(() => {
+                    if (document.getElementById('usageChart')) {
+                        initChart();
+                    }
+                }, 0);
+            } else {
+                // 如果统计滑块被移除，销毁图表
+                if (chart) {
+                    chart.destroy();
+                    chart = null;
+                }
+            }
         }
 
-        function updateChart() {
+        function initChart() {
             const ctx = document.getElementById('usageChart');
             if (!ctx) return;
 
-            const chartContext = ctx.getContext('2d');
-
             if (chart) {
-                // 更新现有图表的数据
-                chart.data.datasets[0].data = Object.values(usage);
-                chart.update();
-            } else {
-                // 如果图表不存在，则创建新图表
-                chart = new Chart(chartContext, {
-                    type: 'doughnut',
-                    data: {
-                        labels: Object.keys(usage),
-                        datasets: [{
-                            data: Object.values(usage),
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.8)',
-                                'rgba(54, 162, 235, 0.8)',
-                                'rgba(255, 206, 86, 0.8)',
-                                'rgba(75, 192, 192, 0.8)'
-                            ]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: false
-                            },
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    boxWidth: 12,
-                                    padding: 15,
-                                    font: {
-                                        size: 12
-                                    }
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(usage),
+                    datasets: [{
+                        data: Object.values(usage),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: false
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 15,
+                                font: {
+                                    size: 12
                                 }
                             }
-                        },
-                        layout: {
-                            padding: {
-                                top: 10,
-                                bottom: 20
-                            }
-                        },
-                        animation: {
-                            animateScale: true,
-                            animateRotate: true
                         }
+                    },
+                    layout: {
+                        padding: {
+                            top: 10,
+                            bottom: 20
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
                     }
-                });
+                }
+            });
+        }
+
+        function updateChart() {
+            if (!chart) {
+                initChart();
+            } else {
+                chart.data.datasets[0].data = Object.values(usage);
+                chart.update();
             }
         }
 
@@ -1272,6 +1824,7 @@
             });
 
             localStorage.setItem('activeSliders', JSON.stringify(activeSliders));
+            
             initSlidersWithoutChart();
             closeSliderEditModal();
         }
