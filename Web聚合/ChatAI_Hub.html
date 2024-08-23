@@ -29,7 +29,7 @@
         }
 
         .sidebar {
-            width: 280px;
+            width: 300px;
             background-color: #ffffff;
             box-shadow: 2px 0 10px var(--shadow-color);
             padding: 20px;
@@ -59,19 +59,30 @@
         }
 
         .sidebar-header h2 {
-            font-family: 'American Typewriter', 'Courier New', monospace;
-            font-weight: normal;
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* 更换为更圆滑的无衬线字体 */
+            font-weight: 500; /* 稍微加粗一点 */
             color: var(--primary-color);
-            font-size: 24px;
+            font-size: 24px; /* 略微增大字号 */
             margin: 0;
             display: flex;
             align-items: baseline;
+            white-space: nowrap; /* 防止文字换行 */
         }
 
         .sidebar-header h2 .version {
-            font-size: 16px;
+            font-size: 14px; /* 稍微缩小版本号字体 */
             color: #999;
             margin-left: 5px;
+        }
+
+        /* 调整侧边栏宽度，确保标题不会换行 */
+        .sidebar {
+            width: 300px; /* 增加宽度 */
+        }
+
+        /* 调整折叠时的宽度 */
+        .sidebar.collapsed {
+            width: 60px;
         }
 
         .sidebar ul {
@@ -134,7 +145,7 @@
             position: relative;
             margin: 20px auto;
             background-color: #f0f8ff; /* 淡蓝色背景 */
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴�� */
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴 */
         }
 
         .clock-face {
@@ -719,19 +730,30 @@
         }
 
         .sidebar-header h2 {
-            font-family: 'American Typewriter', 'Courier New', monospace;
-            font-weight: normal;
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* 更换为更圆滑的无衬线字体 */
+            font-weight: 500; /* 稍微加粗一点 */
             color: var(--primary-color);
-            font-size: 24px;
+            font-size: 24px; /* 略微增大字号 */
             margin: 0;
             display: flex;
             align-items: baseline;
+            white-space: nowrap; /* 防止文字换行 */
         }
 
         .sidebar-header h2 .version {
-            font-size: 16px;
+            font-size: 14px; /* 稍微缩小版本号字体 */
             color: #999;
             margin-left: 5px;
+        }
+
+        /* 调整侧边栏宽度，确保标题不会换行 */
+        .sidebar {
+            width: 300px; /* 增加宽度 */
+        }
+
+        /* 调整折叠时的宽度 */
+        .sidebar.collapsed {
+            width: 60px;
         }
 
         /* 确保下方网址按钮的左边距与header一致 */
@@ -858,7 +880,7 @@
                             <button onclick="addTextItem()" class="add-btn">添加</button>
                             <button onclick="exportCSV()" class="export-btn">导出CSV</button>
                             <button onclick="document.getElementById('csvFile').click()" class="import-btn">导入CSV</button>
-                            <button onclick="clearAllTextItems()" class="clear-btn">清空有</button>
+                            <button onclick="clearAllTextItems()" class="clear-btn">清空所有</button>
                             <input type="file" id="csvFile" accept=".csv" style="display:none;" onchange="importCSV()">
                         </div>
                         <div id="textItems" class="expanded"></div>
@@ -1032,7 +1054,9 @@
 
         function changeIframe(site) {
             if (currentSite) {
-                usage[currentSite] += Math.round((Date.now() - startTime) / 1000);
+                // 更新当前网站的使用时间
+                const currentTime = Date.now();
+                usage[currentSite] += Math.round((currentTime - startTime) / 1000);
                 document.getElementById(currentSite).classList.remove('active');
             }
             document.getElementById(site).classList.add('active');
@@ -1176,9 +1200,9 @@
             setDate();
             loadTextItems();
 
-            // 重新初始化使用时间统计
+            // 初始化使用时间统计
             startTime = Date.now();
-            usage = {
+            usage = JSON.parse(localStorage.getItem('usage')) || {
                 'ChatGLM': 0,
                 'Kimi': 0,
                 'DeepSeek': 0,
@@ -1190,6 +1214,11 @@
 
             // 添加这行代码来更新按钮状态
             updateToggleButtonState();
+
+            // 初始化当前网站
+            currentSite = 'ChatGLM'; // 假设默认网站是 ChatGLM
+            document.getElementById(currentSite).classList.add('active');
+            startTime = Date.now();
         }
 
         function openSliderEditModal() {
@@ -1294,7 +1323,7 @@
             const text = items[index].content;
             navigator.clipboard.writeText(text).then(() => {
                 console.log('文本已复制到剪贴板');
-                alert('文本已复制到剪贴板');
+                alert('本已复制到剪贴板');
             });
         }
 
@@ -1369,8 +1398,12 @@
             setInterval(() => {
                 setDate();
                 if (currentSite) {
-                    usage[currentSite] = Math.round((Date.now() - startTime) / 1000);
+                    const currentTime = Date.now();
+                    usage[currentSite] += Math.round((currentTime - startTime) / 1000);
+                    startTime = currentTime; // 更新开始时间
                     updateChart();
+                    // 保存使用时间到本地存储
+                    localStorage.setItem('usage', JSON.stringify(usage));
                 }
             }, 1000);
 
