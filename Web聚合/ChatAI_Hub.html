@@ -628,6 +628,73 @@
         .toast.show {
             opacity: 1;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-confirm, .btn-cancel {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-confirm {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-cancel {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background-color: #bdc3c7;
+        }
     </style>
 </head>
 <body>
@@ -1261,6 +1328,73 @@
         .toast.show {
             opacity: 1;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-confirm, .btn-cancel {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-confirm {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-cancel {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background-color: #bdc3c7;
+        }
     </style>
 </head>
 <body>
@@ -1311,6 +1445,18 @@
             </div>
             <div class="modal-footer">
                 <button onclick="saveSliderSettings()" class="save-btn">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认清空的模态框 -->
+    <div id="confirmClearModal" class="modal">
+        <div class="modal-content">
+            <h2>确认清空</h2>
+            <p>您确定要清空所有文本项吗？此操作不可撤销。</p>
+            <div class="modal-buttons">
+                <button id="confirmClear" class="btn-confirm">确认清空</button>
+                <button id="cancelClear" class="btn-cancel">取消</button>
             </div>
         </div>
     </div>
@@ -1541,6 +1687,73 @@
         .clock-3 { right: 5px; top: 50%; transform: translateY(-50%); }
         .clock-6 { bottom: 5px; left: 50%; transform: translateX(-50%); }
         .clock-9 { left: 5px; top: 50%; transform: translateY(-50%); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-confirm, .btn-cancel {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-confirm {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-cancel {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background-color: #bdc3c7;
+        }
     </style>
 
     <script>
@@ -1588,7 +1801,7 @@
                             <button onclick="addTextItem()" class="add-btn">添加</button>
                             <button onclick="exportCSV()" class="export-btn">导出CSV</button>
                             <button onclick="document.getElementById('csvFile').click()" class="import-btn">导入CSV</button>
-                            <button onclick="clearAllTextItems()" class="clear-btn">清空所有</button>
+                            <button onclick="showConfirmClearModal()" class="clear-btn">清空所有</button>
                             <input type="file" id="csvFile" accept=".csv" style="display:none;" onchange="importCSV()">
                         </div>
                         <div class="search-container">
@@ -1625,7 +1838,7 @@
             }
 
             if (csv === "Title,Content\n") {
-                alert("���有效的文本项可以导出");
+                alert("有效的文本项可以导出");
                 return;
             }
 
@@ -1724,45 +1937,156 @@
             }
         }
 
+        // 生成随机ID的函数
+        function generateRandomId(length = 8) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function loadTextItems() {
+            const container = document.getElementById('textItems');
+            const searchInput = document.getElementById('searchInput');
+            if (!container || !searchInput) return;
+
+            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+            
+            function renderItems(filteredItems) {
+                container.innerHTML = '';
+                filteredItems.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'text-item';
+                    itemElement.dataset.id = item.id;
+                    itemElement.innerHTML = `
+                        <div class="text-item-header" onclick="toggleTextItem('${item.id}')">
+                            <span>${escapeHtml(item.title)}</span>
+                            <span class="expand-hint">(点击展开)</span>
+                        </div>
+                        <div class="text-item-content">
+                            <p>${escapeHtml(item.content)}</p>
+                            <div class="button-group">
+                                <button onclick="copyTextItem('${item.id}')">复制</button>
+                                <button onclick="deleteTextItem('${item.id}')">删除</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(itemElement);
+                });
+            }
+
+            function filterItems() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredItems = items.filter(item => 
+                    item.title.toLowerCase().includes(searchTerm)
+                );
+                renderItems(filteredItems);
+            }
+
+            filterItems(); // 初始渲染
+
+            searchInput.addEventListener('input', filterItems);
+        }
+
+        function toggleTextItem(id) {
+            const item = document.querySelector(`.text-item[data-id="${id}"]`);
+            if (item) {
+                item.classList.toggle('expanded');
+                const expandHint = item.querySelector('.expand-hint');
+                if (expandHint) {
+                    expandHint.textContent = item.classList.contains('expanded') ? '(点击收起)' : '(点击展开)';
+                }
+            }
+        }
+
+        function copyTextItem(id) {
+            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+            const item = items.find(item => item.id === id);
+            if (item) {
+                navigator.clipboard.writeText(item.content).then(() => {
+                    showToast('文本已复制到剪贴板');
+                });
+            }
+        }
+
+        function deleteTextItem(id) {
+            let items = JSON.parse(localStorage.getItem('textItems')) || [];
+            items = items.filter(item => item.id !== id);
+            localStorage.setItem('textItems', JSON.stringify(items));
+            loadTextItems(); // 重新加载列表
+            showToast('文本项已删除');
+        }
+
         function addTextItem(title, content) {
-            console.log("尝试添加项:", title, content);
             title = title || document.getElementById('newTextTitle').value.trim();
             content = content || document.getElementById('newTextContent').value.trim();
 
             if (title && content) {
-                console.log("标题和内容验证通过");
-                const textItems = document.getElementById('textItems');
-                if (!textItems) {
-                    console.error("无法找到textItems容器");
-                    return false;
-                }
-                console.log("找到textItems容");
+                const items = JSON.parse(localStorage.getItem('textItems')) || [];
+                const newItem = { 
+                    id: generateRandomId(), // 使用随机生成的ID
+                    title, 
+                    content 
+                };
+                items.push(newItem);
+                localStorage.setItem('textItems', JSON.stringify(items));
 
-                try {
-                    // 保存到本地存储
-                    const items = JSON.parse(localStorage.getItem('textItems')) || [];
-                    items.push({ title, content });
-                    localStorage.setItem('textItems', JSON.stringify(items));
-                    console.log("成功保存本地存储");
+                // 重新加载所有项目
+                loadTextItems();
 
-                    // 重新加载所有项目
-                    loadTextItems();
+                // 清空输入框
+                document.getElementById('newTextTitle').value = '';
+                document.getElementById('newTextContent').value = '';
 
-                    // 清空输入框
-                    document.getElementById('newTextTitle').value = '';
-                    document.getElementById('newTextContent').value = '';
-
-                    return true;
-                } catch (error) {
-                    console.error("添加项目时发生误:", error);
-                    return false;
-                }
+                showToast('新文本项已添加');
+                return true;
             } else {
-                console.log("添加失败：标题或内容为");
+                showToast('添加失败：标题或内容为空');
                 return false;
             }
         }
 
+        function showConfirmClearModal() {
+            const modal = document.getElementById('confirmClearModal');
+            modal.style.display = 'flex';
+        }
+
+        function hideConfirmClearModal() {
+            const modal = document.getElementById('confirmClearModal');
+            modal.style.display = 'none';
+        }
+
+        function clearAllTextItems() {
+            // 清空本地存储中的文本项
+            localStorage.removeItem('textItems');
+            
+            // 重新加载列表（这将显示空列表）
+            loadTextItems();
+            
+            // 显示提示消息
+            showToast('所有文本项已清空');
+
+            // 隐藏确认模态框
+            hideConfirmClearModal();
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 2000);
+            }, 100);
+        }
 
         function changeIframe(site) {
             if (currentSite) {
@@ -1927,7 +2251,7 @@
             // 在所有滑块加载完成后，重新初始化图表
             setTimeout(updateChart, 0);
 
-            // 添加这行代码来更新按钮状态
+            // 添加这行码来更��按钮状态
             updateToggleButtonState();
 
             // 初始化当前网站
@@ -2011,19 +2335,20 @@
             
             function renderItems(filteredItems) {
                 container.innerHTML = '';
-                filteredItems.forEach((item, index) => {
+                filteredItems.forEach(item => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'text-item';
+                    itemElement.dataset.id = item.id;
                     itemElement.innerHTML = `
-                        <div class="text-item-header" onclick="toggleTextItem(${index})">
+                        <div class="text-item-header" onclick="toggleTextItem('${item.id}')">
                             <span>${escapeHtml(item.title)}</span>
                             <span class="expand-hint">(点击展开)</span>
                         </div>
                         <div class="text-item-content">
                             <p>${escapeHtml(item.content)}</p>
                             <div class="button-group">
-                                <button onclick="copyTextItem(${index})">复制</button>
-                                <button onclick="deleteTextItem(${index})">删除</button>
+                                <button onclick="copyTextItem('${item.id}')">复制</button>
+                                <button onclick="deleteTextItem('${item.id}')">删除</button>
                             </div>
                         </div>
                     `;
@@ -2045,19 +2370,62 @@
         }
 
 
-        function toggleTextItem(index) {
-            console.log("切换项目显示:", index);
-            const items = document.querySelectorAll('.text-item');
-            items[index].classList.toggle('expanded');
+        function toggleTextItem(id) {
+            const item = document.querySelector(`.text-item[data-id="${id}"]`);
+            if (item) {
+                item.classList.toggle('expanded');
+                const expandHint = item.querySelector('.expand-hint');
+                if (expandHint) {
+                    expandHint.textContent = item.classList.contains('expanded') ? '(点击收起)' : '(点击展开)';
+                }
+            }
         }
 
-        function copyTextItem(index) {
-            console.log("复制项目:", index);
+        function copyTextItem(id) {
             const items = JSON.parse(localStorage.getItem('textItems')) || [];
-            const text = items[index].content;
-            navigator.clipboard.writeText(text).then(() => {
+            const item = items.find(item => item.id === id);
+            if (item) {
+                navigator.clipboard.writeText(item.content).then(() => {
                     showToast('文本已复制到剪贴板');
                 });
+            }
+        }
+
+        function deleteTextItem(id) {
+            let items = JSON.parse(localStorage.getItem('textItems')) || [];
+            items = items.filter(item => item.id !== id);
+            localStorage.setItem('textItems', JSON.stringify(items));
+            loadTextItems(); // 重新加载列表
+            showToast('文本项已删除');
+        }
+
+        function addTextItem(title, content) {
+            title = title || document.getElementById('newTextTitle').value.trim();
+            content = content || document.getElementById('newTextContent').value.trim();
+
+            if (title && content) {
+                const items = JSON.parse(localStorage.getItem('textItems')) || [];
+                const newItem = { 
+                    id: generateRandomId(), // 使用随机生成的ID
+                    title, 
+                    content 
+                };
+                items.push(newItem);
+                localStorage.setItem('textItems', JSON.stringify(items));
+
+                // 重新加载所有项目
+                loadTextItems();
+
+                // 清空输入框
+                document.getElementById('newTextTitle').value = '';
+                document.getElementById('newTextContent').value = '';
+
+                showToast('新文本项已添加');
+                return true;
+            } else {
+                showToast('添加失败：标题或内容为空');
+                return false;
+            }
         }
 
         function showToast(message) {
@@ -2074,28 +2442,6 @@
                     }, 300);
                 }, 2000);
             }, 100);
-        }
-
-        function deleteTextItem(index) {
-            console.log("删除项目:", index);
-                const items = JSON.parse(localStorage.getItem('textItems')) || [];
-            items.splice(index, 1);
-                localStorage.setItem('textItems', JSON.stringify(items));
-                loadTextItems();
-        }
-
-        function clearAllTextItems() {
-            const items = JSON.parse(localStorage.getItem('textItems')) || [];
-            if (items.length === 0) {
-                alert('没有可清空的文项');
-                return;
-            }
-
-            if (confirm('确定要清空所有文本项吗？此操作不可撤销。')) {
-                localStorage.setItem('textItems', JSON.stringify([])); // 直接清空存储
-                loadTextItems(); // 重新加载空列表
-                alert('所有文本项已清空');
-            }
         }
 
         function toggleTextItems(event) {
@@ -2182,6 +2528,24 @@
 
             // 初化时更新按钮状态
             updateToggleButtonState();
+
+            // 为清空按钮添加事件监听器
+            const clearButton = document.querySelector('.clear-btn');
+            if (clearButton) {
+                clearButton.addEventListener('click', showConfirmClearModal);
+            }
+
+            // 为确认清空按钮添加事件监听器
+            const confirmClearButton = document.getElementById('confirmClear');
+            if (confirmClearButton) {
+                confirmClearButton.addEventListener('click', clearAllTextItems);
+            }
+
+            // 为取消清空按钮添加事件监听器
+            const cancelClearButton = document.getElementById('cancelClear');
+            if (cancelClearButton) {
+                cancelClearButton.addEventListener('click', hideConfirmClearModal);
+            }
         });
 
         // 添加一个新函数来更新按钮状态
@@ -2195,6 +2559,40 @@
                     toggleBtn.textContent = '展开▼';
                 }
             }
+        }
+
+        // 生成随机ID的函数
+        function generateRandomId(length = 8) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function showConfirmClearModal() {
+            const modal = document.getElementById('confirmClearModal');
+            modal.style.display = 'flex';
+        }
+
+        function hideConfirmClearModal() {
+            const modal = document.getElementById('confirmClearModal');
+            modal.style.display = 'none';
+        }
+
+        function clearAllTextItems() {
+            // 清空本地存储中的文本项
+            localStorage.removeItem('textItems');
+            
+            // 重新加载列表（这将显示空列表）
+            loadTextItems();
+            
+            // 显示提示消息
+            showToast('所有文本项已清空');
+
+            // 隐藏确认模态框
+            hideConfirmClearModal();
         }
     </script>
 </body>
