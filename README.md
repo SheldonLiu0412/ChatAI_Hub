@@ -1,4 +1,4 @@
-https://img.shields.io/eclipse-marketplace/last-update/notepad4e
+![Notepad4e Last Update](https://img.shields.io/eclipse-marketplace/last-update/notepad4e)
 # ChatAI Hub
 
 ChatAI Hub是一个集成了各种聊天AI工具的平台，旨在为用户提供一个简单易用的Web界面，以便快速访问和使用不同的聊天AI服务。（不重要，只是个玩具而已）
