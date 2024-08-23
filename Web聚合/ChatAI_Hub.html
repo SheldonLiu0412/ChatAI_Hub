@@ -192,12 +192,14 @@
 
         .clock-number {
             position: absolute;
-            width: 100%;
-            text-align: center;
-            top: 5px; /* 调整到顶部 */
             font-size: 14px;
             color: #4a90e2;
         }
+
+        .clock-12 { top: 5px; left: 50%; transform: translateX(-50%); }
+        .clock-3 { right: 5px; top: 50%; transform: translateY(-50%); }
+        .clock-6 { bottom: 5px; left: 50%; transform: translateX(-50%); }
+        .clock-9 { left: 5px; top: 50%; transform: translateY(-50%); }
 
         #toggleSidebar {
             margin-right: 10px; /* 在按钮和标题之间添加一些间距 */
@@ -746,12 +748,14 @@
 
         .clock-number {
             position: absolute;
-            width: 100%;
-            text-align: center;
-            top: 5px; /* 调整到顶部 */
             font-size: 14px;
             color: #4a90e2;
         }
+
+        .clock-12 { top: 5px; left: 50%; transform: translateX(-50%); }
+        .clock-3 { right: 5px; top: 50%; transform: translateY(-50%); }
+        .clock-6 { bottom: 5px; left: 50%; transform: translateX(-50%); }
+        .clock-9 { left: 5px; top: 50%; transform: translateY(-50%); }
 
         #toggleSidebar {
             margin-right: 10px; /* 在按钮和标题之间添加一些间距 */
@@ -1375,12 +1379,14 @@
 
         .clock-number {
             position: absolute;
-            width: 100%;
-            text-align: center;
-            top: 5px; /* 调整到顶部 */
             font-size: 14px;
             color: #4a90e2;
         }
+
+        .clock-12 { top: 5px; left: 50%; transform: translateX(-50%); }
+        .clock-3 { right: 5px; top: 50%; transform: translateY(-50%); }
+        .clock-6 { bottom: 5px; left: 50%; transform: translateX(-50%); }
+        .clock-9 { left: 5px; top: 50%; transform: translateY(-50%); }
     </style>
 
     <script>
@@ -1409,7 +1415,10 @@
                                 <div class="hand min-hand"></div>
                                 <div class="hand second-hand"></div>
                                 <div class="clock-center"></div>
-                                <div class="clock-number">12</div>
+                                <div class="clock-number clock-12">12</div>
+                                <div class="clock-number clock-3">3</div>
+                                <div class="clock-number clock-6">6</div>
+                                <div class="clock-number clock-9">9</div>
                             </div>
                           </div>`
             },
@@ -1633,7 +1642,7 @@
             setDate();
             loadTextItems();
 
-            // 如果存在统计滑块，���新初始化图表
+            // 如果存在统计滑块，新初始化图表
             if (activeSliders.includes('stats')) {
                 // 使用 setTimeout 确保在 DOM 更新后初始化图表
                 setTimeout(() => {
