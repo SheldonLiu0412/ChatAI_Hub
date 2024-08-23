@@ -1,5 +1,5 @@
 ![Notepad4e Last Update](https://img.shields.io/eclipse-marketplace/last-update/notepad4e)
-![License](https://img.shields.io/github/license/SheldonLiu0412/ChatAI_Hub)
+![GitHub License](https://img.shields.io/github/license/SheldonLiu0412/ChatAI_Hub)
 
 # ChatAI Hub
 
