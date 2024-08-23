@@ -1592,7 +1592,7 @@
                             <input type="file" id="csvFile" accept=".csv" style="display:none;" onchange="importCSV()">
                         </div>
                         <div class="search-container">
-                            <input type="text" id="searchInput" placeholder="搜索标题...（记得展开哦）">
+                            <input type="text" id="searchInput" placeholder="搜索标题...">
                         </div>
                         <button id="toggleTextItems" class="toggle-btn">收起▲</button>
                         <div id="textItems" class="expanded"></div>
@@ -1625,7 +1625,7 @@
             }
 
             if (csv === "Title,Content\n") {
-                alert("有有效的文本项可以导出");
+                alert("���有效的文本项可以导出");
                 return;
             }
 
@@ -2007,7 +2007,6 @@
             const searchInput = document.getElementById('searchInput');
             if (!container || !searchInput) return;
 
-            container.innerHTML = '';
             const items = JSON.parse(localStorage.getItem('textItems')) || [];
             
             function renderItems(filteredItems) {
@@ -2032,15 +2031,17 @@
                 });
             }
 
-            renderItems(items);
-
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
+            function filterItems() {
+                const searchTerm = searchInput.value.toLowerCase();
                 const filteredItems = items.filter(item => 
                     item.title.toLowerCase().includes(searchTerm)
                 );
                 renderItems(filteredItems);
-            });
+            }
+
+            filterItems(); // 初始渲染
+
+            searchInput.addEventListener('input', filterItems);
         }
 
 
@@ -2055,8 +2056,8 @@
             const items = JSON.parse(localStorage.getItem('textItems')) || [];
             const text = items[index].content;
             navigator.clipboard.writeText(text).then(() => {
-                showToast('文本已复制到剪贴板');
-            });
+                    showToast('文本已复制到剪贴板');
+                });
         }
 
         function showToast(message) {
@@ -2077,10 +2078,10 @@
 
         function deleteTextItem(index) {
             console.log("删除项目:", index);
-            const items = JSON.parse(localStorage.getItem('textItems')) || [];
+                const items = JSON.parse(localStorage.getItem('textItems')) || [];
             items.splice(index, 1);
-            localStorage.setItem('textItems', JSON.stringify(items));
-            loadTextItems();
+                localStorage.setItem('textItems', JSON.stringify(items));
+                loadTextItems();
         }
 
         function clearAllTextItems() {
@@ -2099,17 +2100,17 @@
 
         function toggleTextItems(event) {
             if (event.target.id === 'toggleTextItems') {
-                const textItems = document.getElementById('textItems');
+            const textItems = document.getElementById('textItems');
                 const toggleBtn = event.target;
-                if (textItems.classList.contains('expanded')) {
-                    textItems.classList.remove('expanded');
+            if (textItems.classList.contains('expanded')) {
+                textItems.classList.remove('expanded');
                     textItems.classList.add('collapsed');
-                    toggleBtn.textContent = '展开▼';
-                } else {
+                toggleBtn.textContent = '展开▼';
+            } else {
                     textItems.classList.remove('collapsed');
-                    textItems.classList.add('expanded');
-                    toggleBtn.textContent = '收起▲';
-                }
+                textItems.classList.add('expanded');
+                toggleBtn.textContent = '收起▲';
+            }
             }
         }
 
@@ -2118,7 +2119,7 @@
         }
 
         // 侧边栏收起功能
-        const sidebar = document.getElementById('sidebar');
+            const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('toggleSidebar');
         const sidebarTitle = document.getElementById('sidebarTitle');
         const sidebarLinks = document.getElementById('sidebarLinks');
@@ -2142,7 +2143,7 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            initSliders();
+        initSliders();
             setInterval(() => {
                 setDate();
                 if (currentSite) {
@@ -2185,12 +2186,12 @@
 
         // 添加一个新函数来更新按钮状态
         function updateToggleButtonState() {
-            const textItems = document.getElementById('textItems');
+                const textItems = document.getElementById('textItems');
             const toggleBtn = document.getElementById('toggleTextItems');
             if (textItems && toggleBtn) {
                 if (textItems.classList.contains('expanded')) {
                     toggleBtn.textContent = '收起▲';
-                } else {
+            } else {
                     toggleBtn.textContent = '展开▼';
                 }
             }
