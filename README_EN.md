@@ -26,9 +26,15 @@ This platform aggregates the official websites of four major domestic AI models,
 
 ### Tech Stack
 
-- **HTML**: Used for building the platform's basic structure and layout.
-- **JavaScript**: Implements client-side interaction logic.
-- **Python**: Backend services and data processing.
+- **HTML**: Used to build the basic structure and layout of the platform.
+- **CSS**: Responsible for style design, ensuring the interface is aesthetically pleasing and responsive.
+- **JavaScript**: Implements client-side interaction logic and dynamic functionality.
+- **localStorage API**: Used for local data storage, such as user preferences and text items.
+- **iframe**: Integrates the official websites of multiple AI chat tools.
+- **DOM Manipulation**: Enables dynamic updates to page content and user interface.
+- **Event Listeners**: Handles user interactions and triggers corresponding functions.
+- **Modal**: Used for editing sliders and confirming actions.
+- **Drag-and-Drop Sorting**: Enables custom sorting functionality for sliders.
 
 ### How to Use
 
