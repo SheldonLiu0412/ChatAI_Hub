@@ -1,16 +1,17 @@
 # ChatAI Hub
 
-[English](#english) | [中文](#chinese)
+<div id="language-switch">
+  <a href="#" onclick="switchLanguage('chinese')">中文</a> | <a href="#" onclick="switchLanguage('english')">English</a>
+</div>
 
-<a name="chinese"></a>
+<div id="chinese-version">
+
 ## 中文版
 
 ![Notepad4e Last Update](https://img.shields.io/eclipse-marketplace/last-update/notepad4e)
 ![GitHub License](https://img.shields.io/github/license/SheldonLiu0412/ChatAI_Hub)
 
-
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=SheldonLiu0412&hide_title=true)
-
 
 ChatAI Hub是一个集成了各种聊天AI工具的平台，旨在为用户提供一个简单易用的Web界面，以便快速访问和使用不同的聊天AI服务。（Actually, actually, it's just a toy.）
 
@@ -51,8 +52,16 @@ V0.0.5.11:
 - 修复了页面加载后首次点击更新日志无效的bug
 - 修复了滑块编辑中点击选项区域无法切换选项状态的bug
 
-<a name="english"></a>
+</div>
+
+<div id="english-version" style="display: none;">
+
 ## English Version
+
+![Notepad4e Last Update](https://img.shields.io/eclipse-marketplace/last-update/notepad4e)
+![GitHub License](https://img.shields.io/github/license/SheldonLiu0412/ChatAI_Hub)
+
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=SheldonLiu0412&hide_title=true)
 
 ChatAI Hub is a platform that integrates various chat AI tools, aiming to provide users with a simple and easy-to-use web interface for quick access and use of different chat AI services. (Actually, actually, it's just a toy.)
 
@@ -92,3 +101,12 @@ V0.0.5.11:
 - Optimized slider editing function UI
 - Fixed a bug where clicking the changelog for the first time after page load was ineffective
 - Fixed a bug where clicking the option area in slider editing could not toggle the option state
+
+</div>
+
+<script>
+function switchLanguage(lang) {
+  document.getElementById('chinese-version').style.display = lang === 'chinese' ? 'block' : 'none';
+  document.getElementById('english-version').style.display = lang === 'english' ? 'block' : 'none';
+}
+</script>
