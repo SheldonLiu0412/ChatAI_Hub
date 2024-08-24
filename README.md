@@ -1,6 +1,8 @@
 ![Notepad4e Last Update](https://img.shields.io/eclipse-marketplace/last-update/notepad4e)
 ![GitHub License](https://img.shields.io/github/license/SheldonLiu0412/ChatAI_Hub)
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=SheldonLiu0412)
+
+
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=SheldonLiu0412&hide_title=true)
 
 
 # ChatAI Hub
