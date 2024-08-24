@@ -32,7 +32,8 @@ This platform aggregates the official websites of four major domestic AI models,
 
 ### How to Use
 
-Simply open the HTML file.
+Minimal operation:
+Download the folder named "Web Aggregation," and then simply open the HTML file inside.
 
 ### License
 
@@ -47,3 +48,4 @@ V0.0.5.11:
 - Optimized slider editing function UI
 - Fixed a bug where clicking the changelog for the first time after page load was ineffective
 - Fixed a bug where clicking the option area in slider editing could not toggle the option state
+- Optimize webpage smoothness
