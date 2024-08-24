@@ -6,7 +6,7 @@
 
 <div id="chinese-version">
 
-## 中文版
+## 总览
 
 ![Notepad4e Last Update](https://img.shields.io/eclipse-marketplace/last-update/notepad4e)
 ![GitHub License](https://img.shields.io/github/license/SheldonLiu0412/ChatAI_Hub)
@@ -56,7 +56,7 @@ V0.0.5.11:
 
 <div id="english-version" style="display: none;">
 
-## English Version
+## Overview
 
 ![Notepad4e Last Update](https://img.shields.io/eclipse-marketplace/last-update/notepad4e)
 ![GitHub License](https://img.shields.io/github/license/SheldonLiu0412/ChatAI_Hub)
