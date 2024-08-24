@@ -70,15 +70,6 @@
             margin-left: 5px;
         }
 
-        /* 调整侧边栏宽度，确保标题不会换行 */
-        .sidebar {
-            width: 300px; /* 增加宽度 */
-        }
-
-        /* 调整折叠时的宽度 */
-        .sidebar.collapsed {
-            width: 60px;
-        }
 
         .sidebar ul {
             list-style-type: none;
@@ -140,7 +131,7 @@
             position: relative;
             margin: 20px auto;
             background-color: #f0f8ff; /* 淡蓝色背景 */
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴 */
+            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴影 */
         }
 
         .clock-face {
@@ -376,6 +367,7 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             padding: 10px;
+            margin-bottom: 10px;
         }
 
         .text-item h3 {
@@ -402,17 +394,14 @@
             opacity: 0.8;
         }
 
-        .text-item {
-            margin-bottom: 10px;
-        }
-
         .text-item-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: #f0f0f0;
-            padding: 5px;
-            border-radius: 5px;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 5px;
             cursor: pointer;
         }
 
@@ -438,17 +427,6 @@
             height: 100%;
             background-color: rgba(0,0,0,0.5);
             overflow-y: auto;
-        }
-
-        .modal-content {
-            background-color: #ffffff;
-            margin: 5% auto;
-            padding: 0;
-            border: none;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .modal-header {
@@ -583,17 +561,6 @@
             box-sizing: border-box;
         }
 
-        .text-item-header {
-            cursor: pointer;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         .text-item-header:hover {
             background-color: #e0e0e0;
         }
@@ -661,12 +628,14 @@
 
         .modal-content {
             background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
             width: 90%;
             text-align: center;
+            margin: 5% auto;
+            padding: 30px;
+            border: none;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .modal-content h2 {
@@ -739,6 +708,7 @@
                     <li>优化滑块编辑功能UI</li>
                     <li>修复了页面加载后首次点击更新日志无效的bug</li>
                     <li>修复了滑块编辑中点击选项区域无法切换选项状态的bug</li>
+                    <li>提示了网页流畅度</li>
                 </ol>
             </div>
             <div class="vertical-text">让自己快乐快乐这才叫做意义</div>
@@ -777,318 +747,6 @@
             </div>
         </div>
     </div>
-
-    <style>
-        .slider-edit-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background-color: #ffffff;
-            margin: 5% auto;
-            padding: 0;
-            border: none;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .modal-header {
-            background-color: var(--primary-color);
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 {
-            margin: 0;
-            font-size: 22px;
-            color: #ffffff;
-            font-weight: 500;
-        }
-
-        .close {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .close:hover {
-            color: #f0f0f0;
-        }
-
-        .modal-body {
-            padding: 25px;
-        }
-
-        #sliderCheckboxes {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid #e0e0e0;
-            user-select: none; /* 防止文本被选中 */
-        }
-
-        .checkbox-item:hover {
-            background-color: #e9ecef;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            margin-right: 15px;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-item label {
-            font-size: 18px;
-            color: #333;
-            cursor: pointer;
-            flex-grow: 1;
-            padding: 10px 0; /* 增加可点击区域 */
-        }
-
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid #e9ecef;
-            text-align: right;
-        }
-
-        .save-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .save-btn:hover {
-            background-color: #3a7cbd;
-            transform: translateY(-2px);
-        }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: flex-start; /* 改为左对齐 */
-            align-items: center; /* 垂直居中 */
-            margin-bottom: 20px;
-            padding: 10px 15px; /* 左右添加内边距,与下方按钮对 */
-        }
-
-        #toggleSidebar {
-            margin-right: 10px; /* 在按钮和标题之间添加一些间距 */
-            background: var(--primary-color);
-            color: #ffffff;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-header h2 {
-            font-family: 'Helvetica Neue', Arial, sans-serif; /* 更换为更圆滑的无衬线字体 */
-            font-weight: 500; /* 稍微加粗一点 */
-            color: var(--primary-color);
-            font-size: 24px; /* 略微增大字号 */
-            margin: 0;
-            display: flex;
-            align-items: baseline;
-            white-space: nowrap; /* 防止文字换行 */
-        }
-
-        .sidebar-header h2 .version {
-            font-size: 14px; /* 稍微缩小版本号字体 */
-            color: #999;
-            margin-left: 5px;
-        }
-
-        /* 调整侧边栏宽度，确保标题不会换行 */
-        .sidebar {
-            width: 300px; /* 增加宽度 */
-        }
-
-        /* 调整折叠时的宽度 */
-        .sidebar.collapsed {
-            width: 60px;
-        }
-
-        /* 确保下方网址按钮的左边距与header一致 */
-        .sidebar ul {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-
-        .sidebar a {
-            /* 保持原有样式 */
-        }
-
-        .clock {
-            width: 120px;
-            height: 120px;
-            border: 3px solid #4a90e2; /* 冷色系边框 */
-            border-radius: 50%;
-            position: relative;
-            margin: 20px auto;
-            background-color: #f0f8ff; /* 淡蓝色背景 */
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.2); /* 淡蓝色阴影 */
-        }
-
-        .clock-face {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .hand {
-            position: absolute;
-            top: 50%;
-            transform-origin: 100%;
-            transform: rotate(90deg);
-            transition: all 0.05s;
-            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
-        }
-
-        .hour-hand {
-            width: 35%;
-            height: 4px;
-            background: #3d7ebd; /* 深蓝色时针 */
-            left: 15%;
-        }
-
-        .min-hand {
-            width: 45%;
-            height: 3px;
-            background: #5da0e4; /* 中蓝色分针 */
-            left: 5%;
-        }
-
-        .second-hand {
-            width: 50%;
-            height: 2px;
-            background: #7cb9f1; /* 浅蓝色秒针 */
-            left: 0;
-        }
-
-        .clock-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4a90e2;
-            transform: translate(-50%, -50%);
-        }
-
-        .clock-number {
-            position: absolute;
-            font-size: 14px;
-            color: #4a90e2;
-        }
-
-        .clock-12 { top: 5px; left: 50%; transform: translateX(-50%); }
-        .clock-3 { right: 5px; top: 50%; transform: translateY(-50%); }
-        .clock-6 { bottom: 5px; left: 50%; transform: translateX(-50%); }
-        .clock-9 { left: 5px; top: 50%; transform: translateY(-50%); }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .modal-content h2 {
-            margin-top: 0;
-            color: #333;
-            font-size: 24px;
-        }
-
-        .modal-content p {
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .btn-confirm, .btn-cancel {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-confirm {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-        .btn-confirm:hover {
-            background-color: #c0392b;
-        }
-
-        .btn-cancel {
-            background-color: #ecf0f1;
-            color: #333;
-        }
-
-        .btn-cancel:hover {
-            background-color: #bdc3c7;
-        }
-    </style>
-
     <script>
         let usage = {
             'ChatGLM': 0,
@@ -1803,7 +1461,7 @@
         }
 
         // 侧边栏收起功能
-            const sidebar = document.getElementById('sidebar');
+        const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('toggleSidebar');
         const sidebarTitle = document.getElementById('sidebarTitle');
         const sidebarLinks = document.getElementById('sidebarLinks');
