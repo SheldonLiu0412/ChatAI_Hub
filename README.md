@@ -109,4 +109,9 @@ function switchLanguage(lang) {
   document.getElementById('chinese-version').style.display = lang === 'chinese' ? 'block' : 'none';
   document.getElementById('english-version').style.display = lang === 'english' ? 'block' : 'none';
 }
+
+// 页面加载时默认显示中文版
+window.onload = function() {
+  switchLanguage('chinese');
+}
 </script>
