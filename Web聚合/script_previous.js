@@ -430,9 +430,6 @@ function initChart() {
             }
         }
     });
-    
-    // 强制更新图表
-    updateChart();
 }
 
 function updateChart() {
@@ -736,40 +733,9 @@ toggleBtn.addEventListener('click', () => {
     toggleBtn.textContent = sidebar.classList.contains('collapsed') ? '☰' : '×';
 });
 
-function initializeOrUpdateUsage() {
-    let currentUsage = JSON.parse(localStorage.getItem('usage')) || {};
-    
-    // 检查是否存在旧的 ChatGLM 数据
-    if ('ChatGLM' in currentUsage) {
-        // 如果存在，将其数据转移到 DoubaoAI
-        currentUsage['DoubaoAI'] = currentUsage['ChatGLM'];
-        delete currentUsage['ChatGLM'];
-    }
-    
-    // 确保所有需要的键都存在
-    const requiredKeys = ['DoubaoAI', 'Kimi', 'DeepSeek', 'HailuoAI'];
-    requiredKeys.forEach(key => {
-        if (!(key in currentUsage)) {
-            currentUsage[key] = 0;
-        }
-    });
-    
-    // 移除任何不需要的键
-    Object.keys(currentUsage).forEach(key => {
-        if (!requiredKeys.includes(key)) {
-            delete currentUsage[key];
-        }
-    });
-    
-    // 更新本地存储和全局变量
-    localStorage.setItem('usage', JSON.stringify(currentUsage));
-    usage = currentUsage;
-}
-
-// 在文档加载完成后调用这个函数
+// 初始化
 document.addEventListener('DOMContentLoaded', function() {
-    initializeOrUpdateUsage();
-    initSliders();
+initSliders();
     setInterval(() => {
         setDate();
         if (currentSite) {
