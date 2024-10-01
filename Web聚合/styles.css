@@ -672,3 +672,25 @@ iframe.active {
 .btn-cancel:hover {
     background-color: #bdc3c7;
 }
+
+.screenshot {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.screenshot-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.screenshot-btn:hover {
+    background-color: #3a7cbd;
+    transform: translateY(-2px);
+}

@@ -1,3 +1,4 @@
+// 使用时长统计
 let usage = {
     'DoubaoAI': 0,
     'Kimi': 0,
@@ -51,9 +52,16 @@ const sliderConfigs = {
                 <button id="toggleTextItems" class="toggle-btn">收起▲</button>
                 <div id="textItems" class="expanded"></div>
             </div>`
+    },
+    screenshot: {
+        title: "截屏",
+        content: `<div class="screenshot">
+                    <button id="screenshotBtn" class="screenshot-btn">一键截屏</button>
+                  </div>`
     }
 };
 
+// 导出CSV文件
 function exportCSV() {
     let csv = "\uFEFFTitle,Content\n"; // 添加BOM
     const textItems = document.querySelectorAll('.text-item-header, .text-item-content');
@@ -94,6 +102,7 @@ function exportCSV() {
     document.body.removeChild(link);
 }
 
+// 解析CSV文件内容
 function parseCSV(text) {
     const result = [];
     let row = [];
@@ -138,6 +147,7 @@ function parseCSV(text) {
     return result;
 }
 
+// 导入CSV文件
 function importCSV() {
     console.log("导入函数被调用");
     const fileInput = document.getElementById('csvFile');
@@ -178,7 +188,7 @@ function importCSV() {
     }
 }
 
-// 生成随机ID的函数
+// 生成随机ID
 function generateRandomId(length = 8) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -188,6 +198,7 @@ function generateRandomId(length = 8) {
     return result;
 }
 
+// 加载文本项
 function loadTextItems() {
     const container = document.getElementById('textItems');
     const searchInput = document.getElementById('searchInput');
@@ -231,6 +242,7 @@ function loadTextItems() {
     searchInput.addEventListener('input', filterItems);
 }
 
+// 切换文本项展开/收起状态
 function toggleTextItem(id) {
     const item = document.querySelector(`.text-item[data-id="${id}"]`);
     if (item) {
@@ -242,6 +254,7 @@ function toggleTextItem(id) {
     }
 }
 
+// 复制文本项内容
 function copyTextItem(id) {
     const items = JSON.parse(localStorage.getItem('textItems')) || [];
     const item = items.find(item => item.id === id);
@@ -252,6 +265,7 @@ function copyTextItem(id) {
     }
 }
 
+// 删除文本项
 function deleteTextItem(id) {
     let items = JSON.parse(localStorage.getItem('textItems')) || [];
     items = items.filter(item => item.id !== id);
@@ -260,6 +274,7 @@ function deleteTextItem(id) {
     showToast('文本项已删除');
 }
 
+// 添加新文本项
 function addTextItem(title, content) {
     title = title || document.getElementById('newTextTitle').value.trim();
     content = content || document.getElementById('newTextContent').value.trim();
@@ -289,16 +304,19 @@ function addTextItem(title, content) {
     }
 }
 
+// 显示确认清空模态框
 function showConfirmClearModal() {
     const modal = document.getElementById('confirmClearModal');
     modal.style.display = 'flex';
 }
 
+// 隐藏确认清空模态框
 function hideConfirmClearModal() {
     const modal = document.getElementById('confirmClearModal');
     modal.style.display = 'none';
 }
 
+// 清空所有文本项
 function clearAllTextItems() {
     // 清空本地存储中的文本项
     localStorage.removeItem('textItems');
@@ -313,6 +331,7 @@ function clearAllTextItems() {
     hideConfirmClearModal();
 }
 
+// 显示提示信息
 function showToast(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -329,6 +348,7 @@ function showToast(message) {
     }, 100);
 }
 
+// 切换iframe并更新使用时间
 function changeIframe(site) {
     if (currentSite) {
         // 更新当前网站的使用时间
@@ -341,6 +361,8 @@ function changeIframe(site) {
     currentSite = site;
     updateChart();
 }
+
+// 初始化滑块（不包括图表）
 function initSlidersWithoutChart() {
     const container = document.getElementById('sortableContainer');
     container.innerHTML = '';
@@ -376,8 +398,26 @@ function initSlidersWithoutChart() {
             chart = null;
         }
     }
+
+    // 重新初始化截屏按钮
+    initScreenshotButton();
 }
 
+// 初始化截屏按钮
+function initScreenshotButton() {
+    const screenshotBtn = document.getElementById('screenshotBtn');
+    if (screenshotBtn) {
+        // 移除旧的事件监听器（如果存在）
+        screenshotBtn.removeEventListener('click', captureScreenshot);
+        // 添加新的事件监听器
+        screenshotBtn.addEventListener('click', captureScreenshot);
+        console.log('截图按钮事件监听器已重新添加');
+    } else {
+        console.log('未找到截图按钮');
+    }
+}
+
+// 初始化图表
 function initChart() {
     const ctx = document.getElementById('usageChart');
     if (!ctx) return;
@@ -430,11 +470,9 @@ function initChart() {
             }
         }
     });
-    
-    // 强制更新图表
-    updateChart();
 }
 
+// 更新图表数据
 function updateChart() {
     if (!chart) {
         initChart();
@@ -444,7 +482,7 @@ function updateChart() {
     }
 }
 
-
+// 设置时钟
 function setDate() {
     const clockFace = document.querySelector('.clock-face');
     if (!clockFace) return;
@@ -463,6 +501,7 @@ function setDate() {
     clockFace.querySelector('.hour-hand').style.transform = `rotate(${hourDegrees}deg)`;
 }
 
+// 初始化所有滑块
 function initSliders() {
     const container = document.getElementById('sortableContainer');
     container.innerHTML = '';
@@ -502,8 +541,12 @@ function initSliders() {
     currentSite = 'DoubaoAI'; // 假设默认网站是豆包AI
     document.getElementById(currentSite).classList.add('active');
     startTime = Date.now();
+
+    // 初始化截屏按钮
+    initScreenshotButton();
 }
 
+// 打开滑块编辑模态框
 function openSliderEditModal() {
     const modal = document.getElementById('sliderEditModal');
     const checkboxesContainer = document.getElementById('sliderCheckboxes');
@@ -546,10 +589,12 @@ function openSliderEditModal() {
     modal.style.display = 'block';
 }
 
+// 关闭滑块编辑模态框
 function closeSliderEditModal() {
     document.getElementById('sliderEditModal').style.display = 'none';
 }
 
+// 保存滑块设置
 function saveSliderSettings() {
     const activeSliders = [];
     Object.keys(sliderConfigs).forEach(sliderId => {
@@ -565,7 +610,7 @@ function saveSliderSettings() {
     closeSliderEditModal();
 }
 
-
+// HTML转义
 function escapeHtml(unsafe) {
     return unsafe
         .replace(/&/g, "&amp;")
@@ -693,6 +738,7 @@ function showToast(message) {
     }, 100);
 }
 
+// 切换文本项展开/收起状态
 function toggleTextItems(event) {
     if (event.target.id === 'toggleTextItems') {
     const textItems = document.getElementById('textItems');
@@ -709,6 +755,7 @@ function toggleTextItems(event) {
     }
 }
 
+// 切换更新日志显示状态
 function toggleUpdateLog() {
     updateLogContent.style.display = updateLogContent.style.display === 'none' ? 'block' : 'none';
 }
@@ -736,39 +783,8 @@ toggleBtn.addEventListener('click', () => {
     toggleBtn.textContent = sidebar.classList.contains('collapsed') ? '☰' : '×';
 });
 
-function initializeOrUpdateUsage() {
-    let currentUsage = JSON.parse(localStorage.getItem('usage')) || {};
-    
-    // 检查是否存在旧的 ChatGLM 数据
-    if ('ChatGLM' in currentUsage) {
-        // 如果存在，将其数据转移到 DoubaoAI
-        currentUsage['DoubaoAI'] = currentUsage['ChatGLM'];
-        delete currentUsage['ChatGLM'];
-    }
-    
-    // 确保所有需要的键都存在
-    const requiredKeys = ['DoubaoAI', 'Kimi', 'DeepSeek', 'HailuoAI'];
-    requiredKeys.forEach(key => {
-        if (!(key in currentUsage)) {
-            currentUsage[key] = 0;
-        }
-    });
-    
-    // 移除任何不需要的键
-    Object.keys(currentUsage).forEach(key => {
-        if (!requiredKeys.includes(key)) {
-            delete currentUsage[key];
-        }
-    });
-    
-    // 更新本地存储和全局变量
-    localStorage.setItem('usage', JSON.stringify(currentUsage));
-    usage = currentUsage;
-}
-
-// 在文档加载完成后调用这个函数
+// 初始化
 document.addEventListener('DOMContentLoaded', function() {
-    initializeOrUpdateUsage();
     initSliders();
     setInterval(() => {
         setDate();
@@ -783,15 +799,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 
     // 始化可拖动排序
-new Sortable(sortableContainer, {
-    animation: 150,
-    ghostClass: 'sortable-ghost',
-    onEnd: function() {
-        const newOrder = Array.from(sortableContainer.children).map(item => item.id.replace('Container', ''));
-        localStorage.setItem('activeSliders', JSON.stringify(newOrder));
-        initSlidersWithoutChart(); // 使用新的初始化函数
-    }
-});
+    new Sortable(sortableContainer, {
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        onEnd: function() {
+            const newOrder = Array.from(sortableContainer.children).map(item => item.id.replace('Container', ''));
+            localStorage.setItem('activeSliders', JSON.stringify(newOrder));
+            initSlidersWithoutChart(); // 使用新的初始化函数
+        }
+    });
 
     // 添加一些动画效果
     document.querySelectorAll('.sidebar a, .sortable-item, .update-log').forEach(element => {
@@ -837,8 +853,16 @@ new Sortable(sortableContainer, {
     // 初始化更新日志的显示状态
     const updateLogContent = document.getElementById('updateLogContent');
     updateLogContent.style.display = 'none';
-});
 
+    // 初始化截屏按钮
+    const screenshotBtn = document.getElementById('screenshotBtn');
+        if (screenshotBtn) {
+            screenshotBtn.addEventListener('click', captureScreenshot);
+            console.log('截图按钮事件监听器已添加');
+        } else {
+            console.log('未找到截图按钮');
+        }
+});
 // 添加一个新函数来更新按钮状态
 function updateToggleButtonState() {
         const textItems = document.getElementById('textItems');
@@ -886,4 +910,32 @@ function clearAllTextItems() {
     hideConfirmClearModal();
 }
 
+// 添加截屏功能
+async function captureScreenshot() {
+    console.log('截图函数被调用');
+    showToast('正在准备截图...');
+
+    try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({preferCurrentTab: true});
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        await new Promise(resolve => video.onloadedmetadata = resolve);
+        video.play();
+
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        stream.getTracks().forEach(track => track.stop());
+
+        const link = document.createElement('a');
+        link.download = 'screenshot.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        showToast('截图已保存');
+    } catch (err) {
+        console.error('截图失败:', err);
+        showToast('截图失败，请检查是否授予了屏幕捕获权限');
+    }
+}
 
