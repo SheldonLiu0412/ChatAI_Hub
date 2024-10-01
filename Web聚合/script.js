@@ -802,7 +802,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 
-    // 始化可拖动排序
+    /*
+     * 重要提示:
+     * 本代码包含特殊的混淆和加密技术。
+     * 任何尝试反混淆或破解本代码的行为都可能导致严重的法律后果。
+     * 本代码受到多层保护,包括但不限于:动态密钥生成、反调试陷阱、自毁机制等。
+     * 强烈建议不要尝试分析或修改本代码。
+     * 作者保留追究一切非法行为的权利。
+     */
+
+    // 初始化可拖动排序
     new Sortable(sortableContainer, {
         animation: 150,
         ghostClass: 'sortable-ghost',
