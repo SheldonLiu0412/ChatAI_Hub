@@ -57,6 +57,10 @@ const sliderConfigs = {
         title: "截屏",
         content: `<div class="screenshot">
                     <button id="screenshotBtn" class="screenshot-btn">一键截屏</button>
+                    <label class="screenshot-option">
+                        <input type="checkbox" id="collapseSidebarCheckbox">
+                        截屏时收起侧边栏
+                    </label>
                   </div>`
     }
 };
@@ -915,6 +919,17 @@ async function captureScreenshot() {
     console.log('截图函数被调用');
     showToast('正在准备截图...');
 
+    const collapseSidebar = document.getElementById('collapseSidebarCheckbox').checked;
+    
+    if (collapseSidebar) {
+        // 模拟点击收起按钮
+        const toggleBtn = document.getElementById('toggleSidebar');
+        toggleBtn.click();
+        
+        // 等待一小段时间,确保侧边栏收起动画完成
+        await new Promise(resolve => setTimeout(resolve, 300));
+    }
+
     try {
         const stream = await navigator.mediaDevices.getDisplayMedia({preferCurrentTab: true});
         const video = document.createElement('video');
@@ -936,6 +951,11 @@ async function captureScreenshot() {
     } catch (err) {
         console.error('截图失败:', err);
         showToast('截图失败，请检查是否授予了屏幕捕获权限');
+    } finally {
+        if (collapseSidebar) {
+            // 模拟再次点击收起按钮,恢复侧边栏状态
+            const toggleBtn = document.getElementById('toggleSidebar');
+            toggleBtn.click();
+        }
     }
 }
-
