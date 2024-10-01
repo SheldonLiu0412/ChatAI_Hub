@@ -760,6 +760,11 @@ iframe.active {
     padding: 15px;
 }
 
+.sidebar.collapsed .bottom-info {
+    opacity: 0;
+    pointer-events: none; /* 防止在隐藏状态下被点击 */
+}
+
 .update-log, #authorInfo {
     cursor: pointer;
     color: var(--primary-color);
