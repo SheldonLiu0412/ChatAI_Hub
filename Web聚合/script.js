@@ -858,6 +858,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateLogContent = document.getElementById('updateLogContent');
     updateLogContent.style.display = 'none';
 
+    // 为作者信息添加点击事件监听器
+    const authorInfo = document.getElementById('authorInfo');
+        if (authorInfo) {
+            authorInfo.addEventListener('click', openAuthorLink);
+        }
+
     // 初始化截屏按钮
     const screenshotBtn = document.getElementById('screenshotBtn');
         if (screenshotBtn) {
@@ -958,4 +964,8 @@ async function captureScreenshot() {
             toggleBtn.click();
         }
     }
+}
+
+function openAuthorLink() {
+    window.open('https://jike.city/snailsshell', '_blank');
 }
