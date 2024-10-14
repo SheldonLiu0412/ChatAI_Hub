@@ -1,9 +1,25 @@
+// 在文件开头添加这个函数
+function cleanupOldData() {
+    let usage = JSON.parse(localStorage.getItem('usage')) || {};
+    if ('HailuoAI' in usage) {
+        delete usage['HailuoAI'];
+        usage['XinghuoAI'] = 0;  // 添加新的 AI
+        localStorage.setItem('usage', JSON.stringify(usage));
+    }
+
+    let activeSliders = JSON.parse(localStorage.getItem('activeSliders')) || [];
+    if (activeSliders.includes('HailuoAI')) {
+        activeSliders = activeSliders.map(slider => slider === 'HailuoAI' ? 'XinghuoAI' : slider);
+        localStorage.setItem('activeSliders', JSON.stringify(activeSliders));
+    }
+}
+
 // 使用时长统计
 let usage = {
     'DoubaoAI': 0,
     'Kimi': 0,
     'DeepSeek': 0,
-    'HailuoAI': 0
+    'XinghuoAI': 0
 };
 
 let startTime;
@@ -364,6 +380,25 @@ function changeIframe(site) {
     startTime = Date.now();
     currentSite = site;
     updateChart();
+
+    // 更新 iframe 的 src
+    document.getElementById('mainFrame').src = getUrlForSite(site);
+}
+
+// 更新获取网站 URL 的辅助函数
+function getUrlForSite(site) {
+    switch(site) {
+        case 'DoubaoAI':
+            return 'https://www.doubao.com/';
+        case 'Kimi':
+            return 'https://kimi.moonshot.cn/';
+        case 'DeepSeek':
+            return 'https://chat.deepseek.com/';
+        case 'XinghuoAI':  // 更新这里
+            return 'https://xinghuo.xfyun.cn/desk';
+        default:
+            return '';
+    }
 }
 
 // 初始化滑块（不包括图表）
@@ -507,6 +542,8 @@ function setDate() {
 
 // 初始化所有滑块
 function initSliders() {
+    cleanupOldData();  // 在初始化之前清理旧数据
+
     const container = document.getElementById('sortableContainer');
     container.innerHTML = '';
 
@@ -532,13 +569,13 @@ function initSliders() {
         'DoubaoAI': 0,
         'Kimi': 0,
         'DeepSeek': 0,
-        'HailuoAI': 0
+        'XinghuoAI': 0
     };
 
     // 在所有滑块加载完成后，重新初始化图表
     setTimeout(updateChart, 0);
 
-    // 添加这行码来更按钮状态
+    // 添加这行码来更新按钮状态
     updateToggleButtonState();
 
     // 初始化当前网站
