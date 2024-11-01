@@ -1,4 +1,3 @@
-// 在文件开头添加这个函数
 function cleanupOldData() {
     let usage = JSON.parse(localStorage.getItem('usage')) || {};
     if ('HailuoAI' in usage) {
@@ -395,7 +394,7 @@ function getUrlForSite(site) {
         case 'DeepSeek':
             return 'https://chat.deepseek.com/';
         case 'XinghuoAI':  // 更新这里
-            return 'https://xinghuo.xfyun.cn/desk';
+            return 'https://www.shenyandayi.com/';
         default:
             return '';
     }
@@ -465,10 +464,19 @@ function initChart() {
         chart.destroy();
     }
 
+    // 添加标签映射
+    const labelMap = {
+        'DoubaoAI': '豆包',
+        'Kimi': 'Kimi',
+        'DeepSeek': 'DeepSeek',
+        'XinghuoAI': '深言达意'  // 更新显示名称
+    };
+
     chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: Object.keys(usage),
+            // 使用映射转换标签
+            labels: Object.keys(usage).map(key => labelMap[key]),
             datasets: [{
                 data: Object.values(usage),
                 backgroundColor: [
